@@ -27,11 +27,11 @@ public class RetrofitInstance {
     public static final String   Image_error_URL = "http://e-smarts.net/CMSAPI/image/";
     //public static final String Image_error_URL = "http://122.170.4.112/CMSWebApi/image/";
 //    UAT Links CMSWebApi
-    private static final String BASE_URL = "http://122.170.4.112/CMSWebApi/api/";
+    private static final String BASE_URL = "http://e-smarts.co.in/cmswebapiuat/api/";
 //    public static final String Image_URL = "http://e-smarts.net/CMSAPI/image/";
-    public static final String Image_URL = "http://122.170.4.112/CMSWebApi/image/";
+    public static final String Image_URL = "http://e-smarts.co.in/cmswebapiuat/image/";
 
-    public static final String resultUrl="http://122.170.4.112/CMSResult/Result.aspx?";
+    public static final String resultUrl="http://e-smarts.co.in/cmsresultuat/Result.aspx?";
     //private static final String BASE_URL = "http://e-smarts.com/CMSAPI/api/";
 //    http://122.170.4.112/gurukulartidemo/
 //    http://e-smarts.com/CMSAPI/api/z

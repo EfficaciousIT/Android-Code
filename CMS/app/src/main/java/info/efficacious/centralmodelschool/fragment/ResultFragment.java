@@ -50,11 +50,11 @@ public class ResultFragment extends Fragment {
         role_id = settings.getString("TAG_USERTYPEID", "");
         academic_id = settings.getString("TAG_ACADEMIC_ID", "");
         User_id = settings.getString("TAG_USERID", "");
-        //school_id = settings.getString("TAG_", "");
+        school_id = settings.getString("TAG_SCHOOL_ID", "");
         webView=view.findViewById(R.id.webview);
         progress.show();
 
-        String url= RetrofitInstance.resultUrl+"strStudentId="+User_id+"&strStandardId="+student_id+"&strAcademicId="+academic_id+"&strschoolid= 2";
+        String url= RetrofitInstance.resultUrl+"strStudentId="+User_id+"&strStandardId="+student_id+"&strAcademicId="+academic_id+"&strschoolid="+school_id;
 
         //Toast.makeText(getContext(),""+url,Toast.LENGTH_LONG).show();
         Log.d("URL","Url"+url);

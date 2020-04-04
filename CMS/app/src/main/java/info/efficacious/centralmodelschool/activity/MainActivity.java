@@ -43,6 +43,7 @@ import info.efficacious.centralmodelschool.Tab.Timetable_sliding_tab;
 import info.efficacious.centralmodelschool.common.ConnectionDetector;
 import info.efficacious.centralmodelschool.dialogbox.BottomLayoutSheetDialog;
 import info.efficacious.centralmodelschool.fragment.Admin_Dashboard;
+import info.efficacious.centralmodelschool.fragment.Admission_Fragment;
 import info.efficacious.centralmodelschool.fragment.All_Standard_Book;
 import info.efficacious.centralmodelschool.fragment.DailyDiaryListFragment;
 import info.efficacious.centralmodelschool.fragment.Event_list_fragment;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String title = "";
     ConnectionDetector cd;
     ImageView chating_imgbtn;
+    MenuItem result,admission;
     public static CircleImageView profile_img;
     private static final String PREFRENCES_NAME = "myprefrences";
     SharedPreferences settings;
@@ -119,8 +121,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         try {
             Menu menu = navigationView.getMenu();
-            MenuItem result = menu.findItem(R.id.nav_Result);
-            //result.setVisible(false);
+            result = menu.findItem(R.id.nav_Result);
+            admission = menu.findItem(R.id.nav_admission);
+            result.setVisible(false);
+            admission.setVisible(false);
 
             if (role_id.contentEquals("1") || role_id.contentEquals("2")) {
                 // Student parent Login
@@ -138,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dashboard.setVisible(true);
                 MenuItem aboutus = menu.findItem(R.id.nav_about_us);
                 aboutus.setVisible(true);
+
+                result.setVisible(true);
+                admission.setVisible(true);
 
                 if (!cd.isConnectingToInternet()) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -586,7 +593,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         } catch (Exception ex) {
 
                         }
-                    } else if (id == R.id.nav_message) {
+                    }else if (id == R.id.nav_admission) {
+                        try {
+                            new AlertDialog.Builder(this)
+                                    .setMessage("Coming Soon...")
+                                    .setNegativeButton("ok", null)
+                                    .show();
+                            title = "Admission";
+                            mfragment.beginTransaction().replace(R.id.content_main, new Admission_Fragment()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                              Toast.makeText(this,""+ex,Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                    else if (id == R.id.nav_message) {
                         try {
                             title = "Messaging";
 //                            mfragment.beginTransaction().replace(R.id.content_main, new MessagingFragment()).commitAllowingStateLoss();
@@ -917,12 +937,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     .setMessage("Coming Soon...")
                                     .setNegativeButton("ok", null)
                                     .show();
-
                         } catch (Exception ex) {
+                            Toast.makeText(this,""+ex,Toast.LENGTH_LONG).show();
 
                         }
 
-                    } else if (id == R.id.nav_Homework) {
+                    }else if (id == R.id.nav_admission) {
+                        try {
+                            title = "Re-Admission Form";
+                            mfragment.beginTransaction().replace(R.id.content_main, new Admission_Fragment()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                            Toast.makeText(this,""+ex,Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+
+                    else if (id == R.id.nav_Homework) {
                         try {
                             title = "Home Work";
                             DailyDiaryListFragment dailyDiaryListFragment = new DailyDiaryListFragment();
