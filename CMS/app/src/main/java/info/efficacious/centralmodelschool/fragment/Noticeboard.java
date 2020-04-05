@@ -46,33 +46,35 @@ public class Noticeboard extends Fragment {
     Databasehelper mydb;
     RecyclerView mrecyclerView;
     RecyclerView.Adapter madapter;
-    String Schooli_id, role_id, intStandard_id, academic_id;
+    String Schooli_id,role_id,intStandard_id,academic_id;
     View myview;
     ConnectionDetector cd;
     private ProgressDialog progress;
     FloatingActionButton addButton;
-    ArrayList<DashboardDetail> noticeboard = new ArrayList<DashboardDetail>();
-
+    ArrayList<DashboardDetail> noticeboard=new ArrayList<DashboardDetail>();
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        myview = inflater.inflate(R.layout.noticeboard, null);
+        myview=inflater.inflate(R.layout.noticeboard,null);
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
-        Schooli_id = settings.getString("TAG_SCHOOL_ID", "");
+        Schooli_id= settings.getString("TAG_SCHOOL_ID", "");
         role_id = settings.getString("TAG_USERTYPEID", "");
         academic_id = settings.getString("TAG_ACADEMIC_ID", "");
-        addButton = (FloatingActionButton) myview.findViewById(R.id.addButton);
+        addButton=(FloatingActionButton) myview.findViewById(R.id.addButton);
         addButton.setVisibility(View.GONE);
-        if (role_id.contentEquals("5") || role_id.contentEquals("6") || role_id.contentEquals("7")) {
+        if(role_id.contentEquals("5")||role_id.contentEquals("6")||role_id.contentEquals("7"))
+        {
             addButton.setVisibility(View.VISIBLE);
-        } else {
+        }else
+        {
             addButton.setVisibility(View.GONE);
         }
-
-        try {
-            /*if (role_id.contentEquals("1") || role_id.contentEquals("2")) {
-                intStandard_id = settings.getString("TAG_STANDERDID", "");
-            }*/
-            intStandard_id = settings.getString("TAG_STANDERDID", "");
-        } catch (Exception ex) {
+        try
+        {
+            if(role_id.contentEquals("1")||role_id.contentEquals("2"))
+            {
+                intStandard_id= settings.getString("TAG_STANDERDID", "");
+            }
+        }catch (Exception ex)
+        {
 
         }
         progress = new ProgressDialog(getActivity());
@@ -80,20 +82,24 @@ public class Noticeboard extends Fragment {
         progress.setCanceledOnTouchOutside(false);
         progress.setMessage("loading...");
         progress.show();
-        mrecyclerView = (RecyclerView) myview.findViewById(R.id.chat_recyclerview);
-        mydb = new Databasehelper(getActivity(), "Notifications", null, 1);
+        mrecyclerView=(RecyclerView)myview.findViewById(R.id.chat_recyclerview);
+        mydb=new Databasehelper(getActivity(),"Notifications",null,1);
         cd = new ConnectionDetector(getActivity().getApplicationContext());
-        if (!cd.isConnectingToInternet()) {
+        if (!cd.isConnectingToInternet())
+        {
 
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
             alert.setMessage("No Internet Connection");
-            alert.setPositiveButton("OK", null);
+            alert.setPositiveButton("OK",null);
             alert.show();
 
-        } else {
-            try {
-                NoticeboardAsync();
-            } catch (Exception ex) {
+        }
+        else {
+            try
+            {
+                NoticeboardAsync ();
+            }catch (Exception ex)
+            {
 
             }
 
@@ -101,13 +107,10 @@ public class Noticeboard extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getContext(),ApplyNotice.class);
-                startActivity(intent);
-//                NoticeBoard_application noticeBoard_application = new NoticeBoard_application();
-//                MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoard_application).commitAllowingStateLoss();
+                NoticeBoard_application noticeBoard_application = new NoticeBoard_application();
+                MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoard_application).commitAllowingStateLoss();
             }
         });
-        ((MainActivity) getActivity()).setActionBarTitle("Noticeboard");
         return myview;
     }
 
@@ -115,19 +118,21 @@ public class Noticeboard extends Fragment {
     public void NoticeboardAsync() {
         try {
             Observable<DashboardDetailsPojo> call;
-
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
             if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
-                call = service.getDashboardDetails("NoticeBoardPrincipal", academic_id, Schooli_id);
-            } else if (role_id.contentEquals("1") || role_id.contentEquals("2")) {
-                Log.d("TAG", "NoticeboardAsync__" + academic_id +"__"+ Schooli_id+"__" + intStandard_id);
-                call = service.getDashboardDetail("NoticeBoardStudent", Schooli_id, intStandard_id);
-            } else if (role_id.contentEquals("3")) {
+                call = service.getDashboardDetails("NoticeBoardPrincipal", academic_id);
+            }else if(role_id.contentEquals("1")||role_id.contentEquals("2"))
+            {
                 call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
-            } else {
-                call = service.getDashboardDetails("NoticeBoard", "",Schooli_id);
-                Log.d("TAG", "NoticeboardAsync" + academic_id + Schooli_id + intStandard_id);
+            }else if(role_id.contentEquals("3"))
+            {
+                call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
             }
+            else
+            {
+                call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
+            }
+
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<DashboardDetailsPojo>() {
                 @Override
                 public void onSubscribe(Disposable disposable) {
@@ -137,19 +142,17 @@ public class Noticeboard extends Fragment {
                 @Override
                 public void onNext(DashboardDetailsPojo body) {
                     try {
-                        Log.d("TAG", "onNext" + body.getDashboardDetails());
                         generateNoticeList((ArrayList<DashboardDetail>) body.getDashboardDetails());
                     } catch (Exception ex) {
                         progress.dismiss();
-                        Toast.makeText(getActivity(), " Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     progress.dismiss();
-                    Log.e("TAG", "onError" + t.toString());
-                    Toast.makeText(getActivity(), " onError Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -164,12 +167,11 @@ public class Noticeboard extends Fragment {
     }
 
     public void generateNoticeList(ArrayList<DashboardDetail> taskListDataList) {
-        Log.d("TAG", "generateNoticeList" + taskListDataList.toString());
         try {
             if ((taskListDataList != null && !taskListDataList.isEmpty())) {
-                mrecyclerView.setHasFixedSize(false);
+                mrecyclerView.setHasFixedSize(true);
                 mrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                madapter = new NoticeBoardAdapter(taskListDataList,getContext());
+                madapter = new NoticeBoardAdapter(taskListDataList, getContext());
                 mrecyclerView.setAdapter(madapter);
             } else {
                 Toast toast = Toast.makeText(getActivity(),
@@ -183,7 +185,7 @@ public class Noticeboard extends Fragment {
 
         } catch (Exception ex) {
             progress.dismiss();
-            Toast.makeText(getActivity(), " Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
         }
     }
 }

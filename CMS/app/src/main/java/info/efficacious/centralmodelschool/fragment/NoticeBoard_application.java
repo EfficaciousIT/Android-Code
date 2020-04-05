@@ -65,23 +65,21 @@ import okhttp3.ResponseBody;
 public class NoticeBoard_application extends Fragment {
     View myview;
     Spinner Usertype, Standard;
-    EditText IssueDate, EndDate, NoticeSubject, Notice,attach_Image;
+    EditText IssueDate, EndDate, NoticeSubject, Notice;
     private Calendar calendar;
     private int year, month, day;
-    String fromdate, enddate, Usertype_selected, Standard_selected, Year_id;
+    String fromdate,enddate, Usertype_selected, Standard_selected, Year_id;
     Button saveBtn;
     ConnectionDetector cd;
     Division_spinner_adapter adapter;
     int insertflag;
     private static final String PREFRENCES_NAME = "myprefrences";
     SharedPreferences settings;
-    String Issue_Date, End_Date, Notice_Subject, Notice_Detail, role_id, userid, Schooli_id,standard_id;
+    String Issue_Date, End_Date, Notice_Subject, Notice_Detail, role_id, userid, Schooli_id;
     RelativeLayout std_relativee;
     HashMap<Object, Object> map;
     private ArrayList<HashMap<Object, Object>> dataList;
     ArrayList<StandardDetail> Standard_list = new ArrayList<StandardDetail>();
-    public static final int PICK_IMAGE = 1;
-    InputStream inputStream;
 
     @Nullable
     @Override
@@ -95,11 +93,9 @@ public class NoticeBoard_application extends Fragment {
         Notice = (EditText) myview.findViewById(R.id.notice_et);
         saveBtn = (Button) myview.findViewById(R.id.btnSubmit);
         std_relativee = (RelativeLayout) myview.findViewById(R.id.std_relativee);
-        attach_Image=myview.findViewById(R.id.attach_Image);
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
         role_id = settings.getString("TAG_USERTYPEID", "");
         Year_id = settings.getString("TAG_ACADEMIC_ID", "");
-        standard_id=settings.getString("TAG_STANDERDID","");
         try {
             if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
                 Schooli_id = "";
@@ -109,21 +105,6 @@ public class NoticeBoard_application extends Fragment {
         } catch (Exception ex) {
 
         }
-        attach_Image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(ActivityCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                {
-                    requestPermissions(
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            2000);
-                }
-                else {
-                    startGallery();
-                }
-            }
-        });
         myview.setFocusableInTouchMode(true);
         myview.requestFocus();
         myview.setOnKeyListener(new View.OnKeyListener() {
@@ -150,15 +131,32 @@ public class NoticeBoard_application extends Fragment {
         userid = settings.getString("TAG_USERID", "");
         cd = new ConnectionDetector(getContext().getApplicationContext());
 
-        saveBtn.setOnClickListener(v -> {
-            try {
-                Issue_Date = IssueDate.getText().toString();
-                End_Date = EndDate.getText().toString();
-                Notice_Detail = Notice.getText().toString();
-                Notice_Subject = NoticeSubject.getText().toString();
-                if (!Issue_Date.contentEquals("") && !End_Date.contentEquals("") && !Notice_Subject.contentEquals("") && !Notice_Detail.contentEquals("") && !Usertype_selected.contentEquals("-- Select UserType --")) {
-                    if (Usertype_selected.contentEquals("1")) {
-                        if (!Standard_selected.contentEquals("-- Select Standard--")) {
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Issue_Date = IssueDate.getText().toString();
+                    End_Date = EndDate.getText().toString();
+                    Notice_Detail = Notice.getText().toString();
+                    Notice_Subject = NoticeSubject.getText().toString();
+                    if (!Issue_Date.contentEquals("") && !End_Date.contentEquals("") && !Notice_Subject.contentEquals("") && !Notice_Detail.contentEquals("") && !Usertype_selected.contentEquals("-- Select UserType --")) {
+                        if (Usertype_selected.contentEquals("1")) {
+                            if (!Standard_selected.contentEquals("-- Select Standard--")) {
+                                if (!cd.isConnectingToInternet()) {
+
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                                    alert.setMessage("No Internet Connection");
+                                    alert.setPositiveButton("OK", null);
+                                    alert.show();
+
+                                } else {
+                                    SubmitASYNC();
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "Please Fill Proper Data", Toast.LENGTH_LONG).show();
+                            }
+
+                        } else if (Usertype_selected.contentEquals("0")) {
                             if (!cd.isConnectingToInternet()) {
 
                                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -167,69 +165,55 @@ public class NoticeBoard_application extends Fragment {
                                 alert.show();
 
                             } else {
-                                SubmitASYNC();
+                                Standard_selected = "0";
+                                if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
+                                    SubmitAllASYNCByPrincipal1 ();
+                                } else {
+                                    SubmitAllASYNC();
+                                }
                             }
                         } else {
-                            Toast.makeText(getActivity(), "Please Fill Proper Data", Toast.LENGTH_LONG).show();
-                        }
+                            if (!cd.isConnectingToInternet()) {
 
-                    } else if (Usertype_selected.contentEquals("0")) {
-                        if (!cd.isConnectingToInternet()) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                                alert.setMessage("No Internet Connection");
+                                alert.setPositiveButton("OK", null);
+                                alert.show();
 
-                            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                            alert.setMessage("No Internet Connection");
-                            alert.setPositiveButton("OK", null);
-                            alert.show();
-
-                        } else {
-                            Standard_selected = "0";
-                            if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
-                                SubmitAllASYNCByPrincipal1();
                             } else {
-                                SubmitAllASYNC();
+                                Standard_selected = "0";
+                                if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
+                                    SubmitASYNC1 ();
+                                } else {
+                                    SubmitASYNC();
+                                }
+
                             }
                         }
                     } else {
-                        if (!cd.isConnectingToInternet()) {
-
-                            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                            alert.setMessage("No Internet Connection");
-                            alert.setPositiveButton("OK", null);
-                            alert.show();
-
-                        } else {
-                            Standard_selected = "0";
-                            if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
-                                SubmitASYNC1();
-                            } else {
-                                SubmitASYNC();
-                            }
-
+                        if (TextUtils.isEmpty(Issue_Date)) {
+                            IssueDate.setError("Enter Valid Issue Date");
                         }
+                        if (TextUtils.isEmpty(End_Date)) {
+                            EndDate.setError("Enter Valid End Date");
+                        }
+                        if (TextUtils.isEmpty(Notice_Detail)) {
+                            Notice.setError("Enter Notice");
+                        }
+                        if (TextUtils.isEmpty(Notice_Subject)) {
+                            NoticeSubject.setError("Enter Notice Subject");
+                        }
+                        if (Usertype_selected.contentEquals("-- Select UserType --")) {
+                            setSpinnerError(Usertype, "Select Usertype");
+                        }
+                        //Toast.makeText(getActivity(),"Please Fill Proper Data", Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    if (TextUtils.isEmpty(Issue_Date)) {
-                        IssueDate.setError("Enter Valid Issue Date");
-                    }
-                    if (TextUtils.isEmpty(End_Date)) {
-                        EndDate.setError("Enter Valid End Date");
-                    }
-                    if (TextUtils.isEmpty(Notice_Detail)) {
-                        Notice.setError("Enter Notice");
-                    }
-                    if (TextUtils.isEmpty(Notice_Subject)) {
-                        NoticeSubject.setError("Enter Notice Subject");
-                    }
-                    if (Usertype_selected.contentEquals("-- Select UserType --")) {
-                        setSpinnerError(Usertype, "Select Usertype");
-                    }
-                    //Toast.makeText(getActivity(),"Please Fill Proper Data", Toast.LENGTH_LONG).show();
+                } catch (Exception ex) {
+                    ex.getMessage();
                 }
-            } catch (Exception ex) {
-                ex.getMessage();
+
+
             }
-
-
         });
         IssueDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,8 +223,10 @@ public class NoticeBoard_application extends Fragment {
                 month = calendar.get(Calendar.MONTH);
                 day = calendar.get(Calendar.DAY_OF_MONTH);
                 //showDate1(year, month+1, day);
+
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                         new DatePickerDialog.OnDateSetListener() {
+
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
@@ -248,6 +234,7 @@ public class NoticeBoard_application extends Fragment {
                                     NumberFormat f = new DecimalFormat("00");
                                     fromdate = ((f.format(monthOfYear + 1)) + "/" + (f.format(dayOfMonth)) + "/" + year);
 //                            tv_dateSelection.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
                                     SimpleDateFormat sdf = new SimpleDateFormat("mm-dd-yyyy");
                                     Date date1 = null;
                                     try {
@@ -261,10 +248,12 @@ public class NoticeBoard_application extends Fragment {
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-                                    fromdate = ((f.format(dayOfMonth)) + "/" + (f.format(monthOfYear + 1)) + "/" + year);
                                     IssueDate.setText(((f.format(dayOfMonth)) + "/" + (f.format(monthOfYear + 1)) + "/" + year));
+
                                 } catch (Exception ex) {
+
                                 }
+
                             }
                         }, year, month, day);
 
@@ -282,6 +271,7 @@ public class NoticeBoard_application extends Fragment {
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                         new DatePickerDialog.OnDateSetListener() {
+
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
@@ -289,6 +279,7 @@ public class NoticeBoard_application extends Fragment {
                                     NumberFormat f = new DecimalFormat("00");
                                     enddate = ((f.format(monthOfYear + 1)) + "/" + (f.format(dayOfMonth)) + "/" + year);
 //                            tv_dateSelection.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
                                     SimpleDateFormat sdf = new SimpleDateFormat("mm-dd-yyyy");
                                     Date date1 = null;
                                     try {
@@ -302,10 +293,12 @@ public class NoticeBoard_application extends Fragment {
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-                                    enddate = ((f.format(dayOfMonth)) + "/" + (f.format(monthOfYear + 1)) + "/" + year);
                                     EndDate.setText(((f.format(dayOfMonth)) + "/" + (f.format(monthOfYear + 1)) + "/" + year));
+
                                 } catch (Exception ex) {
+
                                 }
+
                             }
                         }, year, month, day);
 
@@ -383,34 +376,14 @@ public class NoticeBoard_application extends Fragment {
                 UserTypeAsync userTypeAsync = new UserTypeAsync();
                 userTypeAsync.execute();
             } catch (Exception ex) {
+
             }
+
+
         }
         return myview;
     }
 
-    private void startGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK) {
-            if (requestCode == PICK_IMAGE) {
-                //TODO: action
-                try {
-                   inputStream = getContext().getContentResolver().openInputStream(data.getData());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                Toast.makeText(getContext(), "Image is"+inputStream, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
     private class UserTypeAsync extends AsyncTask<Void, Void, Void> {
         private final ProgressDialog dialog = new ProgressDialog(getActivity());
 
@@ -455,7 +428,7 @@ public class NoticeBoard_application extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             try {
-                adapter = new Division_spinner_adapter((AppCompatActivity) getContext(), dataList, "NoticeUserType");
+                adapter = new Division_spinner_adapter(getActivity(), dataList, "NoticeUserType");
                 Usertype.setAdapter(adapter);
             } catch (Exception ex) {
 
@@ -505,13 +478,13 @@ public class NoticeBoard_application extends Fragment {
                         Standard.setAdapter(adapter);
                     } catch (Exception ex) {
 
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!1", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!2", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -546,14 +519,14 @@ public class NoticeBoard_application extends Fragment {
 
                     } catch (Exception ex) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!3", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!4", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -572,63 +545,71 @@ public class NoticeBoard_application extends Fragment {
     public void SubmitAllASYNC() {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
+
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Processing...");
             for (int i = 1; i < 6; i++) {
                 String UserAll = String.valueOf(i);
                 if (UserAll.contentEquals("2")) {
+
                 } else {
-                    DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-                    NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
-                    Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
-                    call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
-                        @Override
-                        public void onSubscribe(Disposable disposable) {
-                            dialog.show();
-                        }
-
-                        @Override
-                        public void onNext(ResponseBody body) {
-                            try {
-                            } catch (Exception ex) {
-                                dialog.dismiss();
-                                Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    if(UserAll.contentEquals("5")) {
+                        DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+                        NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
+                        Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
+                        call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
+                            @Override
+                            public void onSubscribe(Disposable disposable) {
+                                dialog.show();
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable t) {
-                            dialog.dismiss();
-                            Log.d("Tag", "Noticeboard Exception" + t.toString());
-                            Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
-                        }
+                            @Override
+                            public void onNext(ResponseBody body) {
+                                try {
 
-                        @Override
-                        public void onComplete() {
-                            if (UserAll.contentEquals("5")) {
-                                dialog.dismiss();
-                                Toast.makeText(getActivity(), "Notice Created Successfully", Toast.LENGTH_SHORT).show();
-                                Noticeboard noticeBoardTab = new Noticeboard();
-                                MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoardTab).commitAllowingStateLoss();
+                                } catch (Exception ex) {
+                                    dialog.dismiss();
+                                    Toast.makeText(getActivity(), "Response taking time seems Network issue!5", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+
+                            @Override
+                            public void onError(Throwable t) {
+                                dialog.dismiss();
+                               // Toast.makeText(getActivity(), "Response taking time seems Network issue!6", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (UserAll.contentEquals("5")) {
+                                    dialog.dismiss();
+                                    Toast.makeText(getActivity(), "Notice Created Successfully", Toast.LENGTH_SHORT).show();
+                                    Noticeboard noticeBoardTab = new Noticeboard();
+                                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoardTab).commitAllowingStateLoss();
+
+                                }
+                            }
+                        });
+                    }
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
         }
     }
 
-    public void SubmitAllASYNCByPrincipal1() {
+    public void SubmitAllASYNCByPrincipal1 () {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Processing...");
-            for (int i = 1; i < 6; i++) {
+            for (int i = 1; i <6 ; i++) {
                 String UserAll = String.valueOf(i);
                 if (UserAll.contentEquals("2")) {
+
                 } else {
                     DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
                     NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", 1);
@@ -642,21 +623,24 @@ public class NoticeBoard_application extends Fragment {
                         @Override
                         public void onNext(ResponseBody body) {
                             try {
+
                             } catch (Exception ex) {
                                 dialog.dismiss();
-                                Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Response taking time seems Network issue!7", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onError(Throwable t) {
                             dialog.dismiss();
-                            Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Response taking time seems Network issue!8", Toast.LENGTH_SHORT).show();
+
                         }
 
                         @Override
                         public void onComplete() {
-                            if (UserAll.contentEquals("5")) {
+                            if(UserAll.contentEquals("5"))
+                            {
                                 dialog.dismiss();
                                 SubmitAllASYNCByPrincipal2();
                             }
@@ -664,19 +648,24 @@ public class NoticeBoard_application extends Fragment {
                     });
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
+
         }
     }
 
-    public void SubmitAllASYNCByPrincipal2() {
+
+    public void SubmitAllASYNCByPrincipal2 () {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
+
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Processing...");
             for (int i = 1; i < 6; i++) {
                 String UserAll = String.valueOf(i);
                 if (UserAll.contentEquals("2")) {
+
                 } else {
                     DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
                     NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", 2);
@@ -690,42 +679,49 @@ public class NoticeBoard_application extends Fragment {
                         @Override
                         public void onNext(ResponseBody body) {
                             try {
+
                             } catch (Exception ex) {
                                 dialog.dismiss();
-                                Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Response taking time seems Network issue!9", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onError(Throwable t) {
                             dialog.dismiss();
-                            Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Response taking time seems Network issue!10", Toast.LENGTH_SHORT).show();
+
                         }
 
                         @Override
                         public void onComplete() {
-                            if (UserAll.contentEquals("5")) {
+                            if(UserAll.contentEquals("5"))
+                            {
                                 dialog.dismiss();
                                 Toast.makeText(getActivity(), "Notice Created Successfully", Toast.LENGTH_SHORT).show();
                                 Noticeboard noticeBoardTab = new Noticeboard();
                                 MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoardTab).commitAllowingStateLoss();
+
                             }
                         }
                     });
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
+
         }
     }
 
     public void SubmitASYNC1() {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
+
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Processing...");
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-            NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", 1);
+            NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "",1);
             Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
                 @Override
@@ -736,16 +732,18 @@ public class NoticeBoard_application extends Fragment {
                 @Override
                 public void onNext(ResponseBody body) {
                     try {
+
                     } catch (Exception ex) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!11", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!12", Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
@@ -755,12 +753,13 @@ public class NoticeBoard_application extends Fragment {
                 }
             });
         } catch (Exception ex) {
+
         }
     }
-
     public void SubmitASYNC2() {
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
+
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Processing...");
@@ -776,16 +775,18 @@ public class NoticeBoard_application extends Fragment {
                 @Override
                 public void onNext(ResponseBody body) {
                     try {
+
                     } catch (Exception ex) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!13", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!14", Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
@@ -797,6 +798,7 @@ public class NoticeBoard_application extends Fragment {
                 }
             });
         } catch (Exception ex) {
+
         }
     }
 
@@ -813,4 +815,3 @@ public class NoticeBoard_application extends Fragment {
         }
     }
 }
-

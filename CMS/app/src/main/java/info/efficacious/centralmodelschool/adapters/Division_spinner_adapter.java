@@ -1,5 +1,6 @@
 package info.efficacious.centralmodelschool.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import info.efficacious.centralmodelschool.R;
 
 public class Division_spinner_adapter extends BaseAdapter {
     ViewHolder holder = null;
-    private AppCompatActivity activity;
+    private Activity activity;
     private ArrayList<HashMap<Object, Object>> data;
     private static LayoutInflater inflater = null;
     HashMap<Object, Object> result2 = new HashMap<Object, Object>();
@@ -24,7 +25,7 @@ public class Division_spinner_adapter extends BaseAdapter {
 
     String value1 = "";
 
-    public Division_spinner_adapter(AppCompatActivity a, ArrayList<HashMap<Object, Object>> dataList, String value) {
+    public Division_spinner_adapter(Activity a, ArrayList<HashMap<Object, Object>> dataList, String value) {
         activity = a;
         data = dataList;
         value1 = value;
@@ -47,8 +48,7 @@ public class Division_spinner_adapter extends BaseAdapter {
     }
 
     public View getView(int position, View vi, ViewGroup parent) {
-        try
-        {
+        try {
             result = new HashMap<Object, Object>();
 
             holder = new ViewHolder();
@@ -70,12 +70,13 @@ public class Division_spinner_adapter extends BaseAdapter {
                 holder.std_div_name.setText(result.get("School_name").toString());
             } else if (value1.contentEquals("SubjectName")) {
                 holder.std_div_name.setText(result.get("SubjectName").toString());
+            } else if (value1.contentEquals("Gallery")) {
+                holder.std_div_name.setText(result.get("EventName").toString());
             } else {
                 holder.std_div_name.setText(result.get("AcademicYear").toString());
             }
             vi.setTag(holder);
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
 
         }
         return vi;
@@ -93,6 +94,3 @@ class ViewHolder {
 
 
 }
-
-
-
