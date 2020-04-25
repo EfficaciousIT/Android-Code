@@ -58,6 +58,7 @@ public class Gallery_dialogBox extends AppCompatActivity {
 
                         } else {
                             Intent intent = new Intent(Gallery_dialogBox.this, MainImages.class);
+                            intent.putExtra("EventDescriptin",EventDescriptin);
                             startActivity(intent);
                             finish();
                         }

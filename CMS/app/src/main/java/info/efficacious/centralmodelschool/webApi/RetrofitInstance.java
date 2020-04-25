@@ -21,17 +21,39 @@ public class RetrofitInstance {
 //    http://192.168.1.150/EfficaciousDemoAPI/
 //    http://192.168.1.150/EfficaciousDemoAPI/image/06_05_2019_13_21_13_56.jpg
 
+    // prod
+    //private static final String  BASE_URL = "http://e-smarts.net/CMSAPI/api/";
+    //public static final String   Image_URL = "http://e-smarts.net/CentralModel/CentralModelServices/UploadImages/";
+    //UAT/prod REAL LINK
+    public static final String   Image_error_URL = "http://e-smarts.net/CMSAPI/image/";
 
+    //public static final String Image_error_URL = "http://122.170.4.112/CMSWebApi/image/";
+
+    //    UAT Links CMSWebApi
+    private static final String BASE_URL = "http://e-smarts.co.in/CMSWEBAPIUAT/api/";
+    public static final String Image_URL = "http://e-smarts.co.in/CMSWEBAPIUAT/image/";
+    public static final String resultUrl="http://e-smarts.co.in/CMSWEBAPIUAT/Result.aspx?";
+    public static final String readmisiionUrl="http://e-smarts.co.in/cmsuat/frmReAdmissionForm.aspx?";
+
+    //PRODUCTION LINK
 //    private static final String  BASE_URL = "http://e-smarts.net/CMSAPI/api/";
 //    public static final String   Image_URL = "http://e-smarts.net/CentralModel/CentralModelServices/UploadImages/";
-    public static final String   Image_error_URL = "http://e-smarts.net/CMSAPI/image/";
-    //public static final String Image_error_URL = "http://122.170.4.112/CMSWebApi/image/";
-//    UAT Links CMSWebApi
-    private static final String BASE_URL = "http://e-smarts.co.in/cmswebapiuat/api/";
-//    public static final String Image_URL = "http://e-smarts.net/CMSAPI/image/";
-    public static final String Image_URL = "http://e-smarts.co.in/cmswebapiuat/image/";
+//    public static final String resultUrl="http://e-smarts.net/CMSResult/Result.aspx?";
+//    public static final String readmisiionUrl="http://e-smarts.net/centralmodel/frmReAdmissionForm.aspx?";
 
-    public static final String resultUrl="http://e-smarts.co.in/cmsresultuat/Result.aspx?";
+
+    //public static final String Image_URL = "http://e-smarts.net/CMSAPI/image/";
+    //    UAT Links CMSWebApi
+
+    //    UAT Links CMSWebApi
+    //public static final String resultUrl="http://e-smarts.net/CMSResult/Result.aspx?";
+
+
+    // UAT Links CMSWebApi for Re-addmission
+
+    // Production Links For Re-admission
+    //public static final String readmisiionUrl="http://e-smarts.net/centralmodel/frmReAdmissionForm.aspx?";
+
     //private static final String BASE_URL = "http://e-smarts.com/CMSAPI/api/";
 //    http://122.170.4.112/gurukulartidemo/
 //    http://e-smarts.com/CMSAPI/api/z

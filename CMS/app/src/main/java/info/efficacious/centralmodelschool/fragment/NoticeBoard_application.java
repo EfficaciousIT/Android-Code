@@ -101,6 +101,7 @@ public class NoticeBoard_application extends Fragment {
                 Schooli_id = "";
             } else {
                 Schooli_id = settings.getString("TAG_SCHOOL_ID", "");
+                Log.d("RESULT234","SHOOL ID"+Schooli_id);
             }
         } catch (Exception ex) {
 
@@ -310,6 +311,7 @@ public class NoticeBoard_application extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     Usertype_selected = String.valueOf(dataList.get(i).get("UserType_id"));
+                    Log.d("RESULT234",Usertype_selected);
                     Issue_Date = IssueDate.getText().toString();
                     End_Date = EndDate.getText().toString();
                     Notice_Detail = Notice.getText().toString();
@@ -350,7 +352,14 @@ public class NoticeBoard_application extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     Standard_selected = String.valueOf(Standard_list.get(i).getIntStandardId());
-                    Schooli_id = String.valueOf(Standard_list.get(i).getIntschoolId());
+                    Log.d("RESULT234","STANDARD ID"+Standard_selected);
+//                    if(Standard_list.get(i).getIntschoolId().equals("") || Standard_list.get(i).getIntschoolId() == null){
+//                         Schooli_id = Schooli_id;
+//                    }else{
+//                        Schooli_id = String.valueOf(Standard_list.get(i).getIntschoolId());
+//                    }
+                    //Schooli_id = String.valueOf(Standard_list.get(i).getIntschoolId());
+                    //Log.d("RESULT234","STANDARD ID SCHOOL ID"+Schooli_id);
                 } catch (Exception ex) {
 
                 }
@@ -491,6 +500,7 @@ public class NoticeBoard_application extends Fragment {
                 @Override
                 public void onComplete() {
 
+
                 }
             });
         } catch (Exception ex) {
@@ -499,14 +509,32 @@ public class NoticeBoard_application extends Fragment {
     }
 
     public void SubmitASYNC() {
+       // Toast.makeText(getActivity(), "Response taking time seems Network issue!32222", Toast.LENGTH_SHORT).show();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Processing...");
-            DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-            NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
-            Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
+            DataService service;
+            Observable<ResponseBody> call;
+            NoticeboardDetail noticeboardDetail;
+//            if (Usertype_selected.contentEquals("1")) {
+//                service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+//                Log.d("RESULT234","STANDARD ID"+Standard_selected);
+//                Log.d("RESULT234","SCHOOL ID"+Schooli_id);
+//                noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
+//
+//                call = service.InsertNotice("NoticeBoardStudent", noticeboardDetail);
+//            }else{
+                service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+                noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
+                Log.d("RESULT234","SCHOOL ID: "+Integer.parseInt(Schooli_id));
+                Log.d("RESULT234","ISSUE DATE: "+fromdate);
+                Log.d("RESULT234","END DATE: "+enddate);
+
+                call = service.InsertNotice("insert", noticeboardDetail);
+
+        //    }
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
                 @Override
                 public void onSubscribe(Disposable disposable) {
@@ -526,7 +554,9 @@ public class NoticeBoard_application extends Fragment {
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response taking time seems Network issue!4", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Notice Created Successfully", Toast.LENGTH_SHORT).show();
+                    Noticeboard noticeBoardTab = new Noticeboard();
+                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoardTab).commitAllowingStateLoss();
 
                 }
 
@@ -539,10 +569,12 @@ public class NoticeBoard_application extends Fragment {
                 }
             });
         } catch (Exception ex) {
+            Toast.makeText(getActivity(), "Response taking time seems Network issue!32222"+ex, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void SubmitAllASYNC() {
+        //Toast.makeText(getActivity(), "I am here", Toast.LENGTH_SHORT).show();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
 
@@ -556,7 +588,11 @@ public class NoticeBoard_application extends Fragment {
                 } else {
                     if(UserAll.contentEquals("5")) {
                         DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-                        NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
+                        NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "192.168.1.150", Integer.parseInt(Schooli_id));
+                        Log.d("RESULT234","SCHOOL ID: "+Integer.parseInt(Schooli_id));
+                        Log.d("RESULT234","ISSUE DATE: "+fromdate);
+                        Log.d("RESULT234","END DATE: "+enddate);
+                        Log.d("RESULT234","USER ID: "+Integer.parseInt(UserAll));
                         Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
                         call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
                             @Override
@@ -577,7 +613,7 @@ public class NoticeBoard_application extends Fragment {
                             @Override
                             public void onError(Throwable t) {
                                 dialog.dismiss();
-                               // Toast.makeText(getActivity(), "Response taking time seems Network issue!6", Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(getActivity(), "Response taking time seems Network issue!6", Toast.LENGTH_SHORT).show();
 
                             }
 

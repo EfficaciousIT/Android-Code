@@ -1,5 +1,6 @@
 package info.efficacious.centralmodelschool.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +53,7 @@ public class Noticeboard extends Fragment {
     private ProgressDialog progress;
     FloatingActionButton addButton;
     ArrayList<DashboardDetail> noticeboard=new ArrayList<DashboardDetail>();
+    @SuppressLint("RestrictedApi")
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myview=inflater.inflate(R.layout.noticeboard,null);
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
@@ -121,12 +123,16 @@ public class Noticeboard extends Fragment {
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
             if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
                 call = service.getDashboardDetails("NoticeBoardPrincipal", academic_id);
-            }else if(role_id.contentEquals("1")||role_id.contentEquals("2"))
+            }else if(role_id.contentEquals("2"))
             {
                 call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
             }else if(role_id.contentEquals("3"))
             {
                 call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
+            }else if(role_id.contentEquals("1"))
+            {
+                Log.d("RESULT234",""+intStandard_id+"Sss"+Schooli_id);
+                call = service.getDashboardDetail("NoticeBoardStudent", intStandard_id, Schooli_id);
             }
             else
             {

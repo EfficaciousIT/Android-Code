@@ -53,13 +53,12 @@ import java.util.Locale;
 
 
 public class MainImages extends AppCompatActivity {
-        public static ImageView img1, img2, img3, img4;
-        public static ArrayList<String> FilePath = new ArrayList<String>();
-        public static ArrayList<String> FileName = new ArrayList<String>();
-    String pathname,EventDescription;
+    public static ImageView img1, img2, img3, img4;
+    public static ArrayList<String> FilePath = new ArrayList<String>();
+    public static ArrayList<String> FileName = new ArrayList<String>();
+    String pathname,EventDescription,Folder_id;
     Button Open_Gallery, Submit;
     private ProgressDialog progressDoalog;
-    private String args;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +70,9 @@ public class MainImages extends AppCompatActivity {
         Open_Gallery = (Button) findViewById(R.id.btn_select);
         Submit = (Button) findViewById(R.id.btnSubmit);
         Submit.setVisibility(View.GONE);
-        Bundle bundle=getIntent().getExtras();
-        try {
-            args = bundle.getString("tag");
-        }catch (Exception ex){
-            Log.d("CMS","MainImages : "+ex);
-        }
-
+        Intent intent1 = getIntent();
+        EventDescription = intent1.getStringExtra("EventDescriptin");
+      //  Folder_id = intent1.getStringExtra("Folder_id");
         Open_Gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,50 +123,38 @@ public class MainImages extends AppCompatActivity {
             ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
             StringBuffer stringBuffer = new StringBuffer();
             try {
-                if (args.equals("fromnoticeboard"))
-                {
-                    if (images.size()==1) {
-                        img1.setImageBitmap(BitmapFactory.decodeFile(images.get(0).path));
-                        pathname = images.get(0).path;
-                        FilePath.add(pathname);
-                        FileName.add(images.get(0).name);
-                    }else {
-                        Toast.makeText(this, "Select only one image", Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    if (images.size() < 5) {
-                        if (images.size() == 0) {
-                            Submit.setVisibility(View.GONE);
-                        } else {
-                            Submit.setVisibility(View.VISIBLE);
-                            for (int i = 0, l = images.size(); i < l; i++) {
-                                stringBuffer.append(images.get(i).path + "\n");
-                                if (i == 0) {
-                                    img1.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
-
-                                } else if (i == 1) {
-                                    img2.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
-
-                                } else if (i == 2) {
-                                    img3.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
-                                } else {
-                                    img4.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
-                                }
-                                pathname = images.get(i).path;
-                                FilePath.add(pathname);
-                                FileName.add(images.get(i).name);
-                            }
-                        }
-
+                if (images.size() < 5) {
+                    if (images.size() == 0) {
+                        Submit.setVisibility(View.GONE);
                     } else {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(MainImages.this);
-                        alert.setMessage("You Cannot Share more than 4 files");
-                        alert.setPositiveButton("OK", null);
-                        alert.show();
+                        Submit.setVisibility(View.VISIBLE);
+                        for (int i = 0, l = images.size(); i < l; i++) {
+                            stringBuffer.append(images.get(i).path + "\n");
+                            if (i == 0) {
+                                img1.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
+
+                            } else if (i == 1) {
+                                img2.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
+
+                            } else if (i == 2) {
+                                img3.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
+                            } else {
+                                img4.setImageBitmap(BitmapFactory.decodeFile(images.get(i).path));
+                            }
+                            pathname = images.get(i).path;
+                            FilePath.add(pathname);
+                            FileName.add(images.get(i).name);
+                        }
                     }
+
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MainImages.this);
+                    alert.setMessage("You Cannot Share more than 4 files");
+                    alert.setPositiveButton("OK", null);
+                    alert.show();
                 }
             } catch (Exception ex) {
-                Log.d("CMS","MainImages: onActivityResult: "+ex);
+
             }
 
 
@@ -185,105 +168,77 @@ public class MainImages extends AppCompatActivity {
     }
 
     public void UploadAsync(int i) {
+        try {
+//                EventDescription=Gallery_dialogBox.EventDescriptin;
             try {
-                EventDescription=Gallery_dialogBox.EventDescriptin;
-                    try {
-                        String extension = "";
-                        progressDoalog = new ProgressDialog(MainImages.this);
-                        progressDoalog.setCancelable(false);
-                        progressDoalog.setCanceledOnTouchOutside(false);
-                        progressDoalog.setMessage("uploading_test...");
+                String extension = "";
+                progressDoalog = new ProgressDialog(MainImages.this);
+                progressDoalog.setCancelable(false);
+                progressDoalog.setCanceledOnTouchOutside(false);
+                progressDoalog.setMessage("uploading...");
+                progressDoalog.show();
+                String fileName = FileName.get(i);
+                String filename = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss_SS", Locale.getDefault()).format(new Date());
+                extension = fileName.substring(fileName.lastIndexOf("."));
+                extension = filename + extension;
+                DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+                String pathname = FilePath.get(i);
+                String path = compressImage(pathname);
+                File file = new File(path);
+                RequestBody requestFile =
+                        RequestBody.create(
+                                MediaType.parse("image/*"),
+                                file
+                        );
+
+                MultipartBody.Part body =
+                        MultipartBody.Part.createFormData("picture",  file.getName() , requestFile);
+                Log.d("RESULT123","EXTENTION: "+extension + " " + "EVENT DESCRIPTION: "+ EventDescription);
+                Observable<ResponseBody> call = service.upload(body, extension,EventDescription);
+                call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
                         progressDoalog.show();
-                        String fileName = FileName.get(i);
-                        String filename = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss_SS", Locale.getDefault()).format(new Date());
-                        extension = fileName.substring(fileName.lastIndexOf("."));
-                        extension = filename + extension;
-                        DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-                        String pathname = FilePath.get(i);
-                        File file = new File(pathname);
-                        File compressedImage = new Compressor(this)
-                                .setMaxWidth(250)
-                                .setMaxHeight(250)
-                                .setQuality(75)
-                                .setCompressFormat(Bitmap.CompressFormat.WEBP)
-                                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                                .compressToFile(file);
-                        RequestBody requestFile =
-                                RequestBody.create(
-                                        MediaType.parse("image/*"),
-                                        compressedImage
-                                );
-//                        String path=compressImage(pathname);
-//                        File file = new File(compressImage(pathname));
-//                        File compressedImgFile = new Compressor(this).compressToFile(file);
-//                        File compressedImage = new Compressor(this)
-//                                .setMaxWidth(150)
-//                                .setMaxHeight(150)
-//
-//                                .setCompressFormat(Bitmap.CompressFormat.WEBP)
-//                                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-//                                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-//                                .compressToFile(file);
-//                        RequestBody requestFile =
-//                                RequestBody.create(
-//                                        MediaType.parse("image/*"),
-////                                        compressedImage
-//                                        path
-//                                );
+                    }
 
-                        MultipartBody.Part body =
-                                MultipartBody.Part.createFormData("picture",  file.getName() , requestFile);
-                        Observable<ResponseBody> call = service.upload(body, extension,EventDescription);
-                        call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
-                            @Override
-                            public void onSubscribe(Disposable disposable) {
-                                progressDoalog.show();
-                            }
+                    @Override
+                    public void onNext(ResponseBody body) {
+                        try {
 
-                            @Override
-                            public void onNext(ResponseBody body) {
-                                try {
+                        } catch (Exception ex) {
+                            progressDoalog.dismiss();
+                            Toast.makeText(MainImages.this, "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-                                } catch (Exception ex) {
-                                    Log.d("Tag","In Catch onNext"+ex.toString());
-                                    progressDoalog.dismiss();
-                                    Toast.makeText(MainImages.this, "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable t) {
-                                Log.d("Tag","In Catch onError"+t.toString());
-                                progressDoalog.dismiss();
-                                Toast.makeText(MainImages.this, "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                progressDoalog.dismiss();
-                                if(i==(FilePath.size()-1))
-                                {
-                                    progressDoalog.dismiss();
-                                    Toast.makeText(MainImages.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
-                                    Gallery_fragment gallery_fragment = new Gallery_fragment();
-                                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, gallery_fragment).commitAllowingStateLoss();
-                                    finish();
-                                }
-                            }
-                        });
-
-                    } catch (Exception ex) {
+                    @Override
+                    public void onError(Throwable t) {
                         progressDoalog.dismiss();
-                        Log.d("Tag","In Catch"+ex.toString());
-                        Toast.makeText(this, "in Catch", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainImages.this, "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
 
                     }
 
+                    @Override
+                    public void onComplete() {
+                        progressDoalog.dismiss();
+                        if(i==(FilePath.size()-1))
+                        {
+                            progressDoalog.dismiss();
+                            Toast.makeText(MainImages.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                            Gallery_fragment gallery_fragment = new Gallery_fragment();
+                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, gallery_fragment).commitAllowingStateLoss();
+                            finish();
+                        }
+                    }
+                });
+
+            } catch (Exception ex) {
+
+
+            }
+
         } catch (Exception ex) {
-                progressDoalog.dismiss();
-                Toast.makeText(this, "in UploadAsync Catch", Toast.LENGTH_SHORT).show();
+
         }
     }
     public String compressImage(String imageUri) {
@@ -343,6 +298,7 @@ public class MainImages extends AppCompatActivity {
             bmp = BitmapFactory.decodeFile(filePath, options);
         } catch (OutOfMemoryError exception) {
             exception.printStackTrace();
+
         }
         try {
             scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight, Bitmap.Config.ARGB_8888);
@@ -394,8 +350,7 @@ public class MainImages extends AppCompatActivity {
             out = new FileOutputStream(filename);
 
 //          write the compressed bitmap at the destination specified by filename.
-//            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 200, out);
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

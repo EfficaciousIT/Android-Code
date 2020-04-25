@@ -1,5 +1,7 @@
 package info.efficacious.centralmodelschool.entity;
 
+import android.content.Intent;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,45 +10,63 @@ public class NoticeboardDetail {
     @SerializedName("intNotice_id")
     @Expose
     private Integer intNoticeId;
+
     @SerializedName("intUserType_id")
     @Expose
     private Integer intUserTypeId;
+
     @SerializedName("intStandard_id")
     @Expose
     private Integer intStandardId;
+
     @SerializedName("intDivision_id")
     @Expose
     private Integer intDivisionId;
+
     @SerializedName("intStudent_id")
     @Expose
     private Integer intStudentId;
+
     @SerializedName("intDepartment_id")
     @Expose
     private Integer intDepartmentId;
+
     @SerializedName("intTeacher_id")
     @Expose
     private Integer intTeacherId;
+
     @SerializedName("dtIssue_date")
     @Expose
     private String dtIssueDate;
+
     @SerializedName("dtEnd_date")
     @Expose
     private String dtEndDate;
+
     @SerializedName("vchSubject")
     @Expose
     private String vchSubject;
+
     @SerializedName("vchNotice")
     @Expose
     private String vchNotice;
+
     @SerializedName("intInserted_by")
     @Expose
     private Integer intInsertedBy;
+
     @SerializedName("InsertIP")
     @Expose
     private String insertIP;
+
     @SerializedName("intSchool_id")
     @Expose
     private Integer intSchoolId;
+
+    @SerializedName("intstanderd_id")
+    @Expose
+    private Integer intstandarid;
+
     @SerializedName("intAcademic_id")
     @Expose
     private Integer intAcademicId;
@@ -171,7 +191,18 @@ public class NoticeboardDetail {
         this.intAcademicId = intAcademicId;
     }
 
-    public NoticeboardDetail(Integer intUserTypeId, Integer intStandardId, Integer intDepartmentId, Integer intTeacherId, String dtIssueDate, String dtEndDate, String vchSubject, String vchNotice, Integer intInsertedBy, String insertIP, Integer intSchoolId) {
+    public NoticeboardDetail(Integer intUserTypeId,
+                             Integer intStandardId,
+                             Integer intDepartmentId,
+                             Integer intTeacherId,
+                             String dtIssueDate,
+                             String dtEndDate,
+                             String vchSubject,
+                             String vchNotice,
+                             Integer intInsertedBy,
+                             String insertIP,
+                             Integer intSchoolId)
+    {
         this.intUserTypeId = intUserTypeId;
         this.intStandardId = intStandardId;
         this.intDepartmentId = intDepartmentId;
@@ -183,5 +214,15 @@ public class NoticeboardDetail {
         this.intInsertedBy = intInsertedBy;
         this.insertIP = insertIP;
         this.intSchoolId = intSchoolId;
+        this.intstandarid = intStandardId;
+    }
+
+
+    public Integer getIntstandarid() {
+        return intstandarid;
+    }
+
+    public void setIntstandarid(Integer intstandarid) {
+        this.intstandarid = intstandarid;
     }
 }

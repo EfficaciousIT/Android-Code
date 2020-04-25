@@ -67,11 +67,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             school_id=settings.getString("TAG_SCHOOL_ID", "");
             String url= RetrofitInstance.Image_URL+data.get(position).getName();
             Log.d("TAG","onBindViewHolderURL"+url);
-            Glide.with(mcontext)
-                .load(url)
-                .fitCenter()// image url
-                .error(R.mipmap.profile)
-                .into(holder.image);
+
+                Glide.with(mcontext)
+                        .load(url)
+                        .fitCenter()// image url
+                        .error(R.mipmap.profile)
+                        .into(holder.image);
+
 
             setImageMethod(RetrofitInstance.Image_URL,data.get(position).getName(),holder.image);
             holder.eventDescriptiontv.setText(data.get(position).getEventDescription());
