@@ -54,6 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
+                    android:visibility="gone"
                     android:text="Last Date: "
                     android:textColor="@color/red"
                     android:textStyle="bold" />
@@ -62,6 +63,7 @@
                     android:id="@+id/todate_noticeboard"
                     style="@android:style/TextAppearance.DeviceDefault.Small"
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:text="Textview"
                     android:textColor="@color/black" />

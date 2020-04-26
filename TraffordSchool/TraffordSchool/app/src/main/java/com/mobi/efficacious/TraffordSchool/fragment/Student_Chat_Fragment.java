@@ -119,7 +119,7 @@ public class Student_Chat_Fragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+               // adapter.getFilter().filter(newText);
                 return true;
             }
         });

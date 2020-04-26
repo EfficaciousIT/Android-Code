@@ -458,6 +458,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 alert.setPositiveButton("OK", null);
                 alert.show();
             } else {
+                 if (id == R.id.nav_about_effi) {
+                    try {
+                        openWebPage("http://efficacious.co.in/Index.aspx");
+                    } catch (Exception ex) {
+
+                    }
+                }
                 //Admin Manager Principal menu option  Admin roleid=5,Principal roleid=6 ,Manager roleid=7
                 if (role_id.equalsIgnoreCase("5") || role_id.equalsIgnoreCase("6") || role_id.equalsIgnoreCase("7")) {
                     if (id == R.id.nav_dashboard) {

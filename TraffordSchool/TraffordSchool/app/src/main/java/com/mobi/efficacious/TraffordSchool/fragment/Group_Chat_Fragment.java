@@ -54,8 +54,8 @@ public class Group_Chat_Fragment extends Fragment {
         myview = inflater.inflate(R.layout.chat_allusername_recylerview, null);
         cd = new ConnectionDetector(getActivity());
         recyclerView = (RecyclerView) myview.findViewById(R.id.chat_listview);
-        searchView = (SearchView) myview.findViewById(R.id.search_view_member);
-        searchView.setVisibility(View.GONE);
+       // searchView =  myview.findViewById(R.id.search_view_member);
+       // searchView.setVisibility(View.GONE);
 
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
         academic_id = settings.getString("TAG_ACADEMIC_ID", "");
@@ -98,25 +98,25 @@ public class Group_Chat_Fragment extends Fragment {
             }
 
         }
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return true;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                adapter.getFilter().filter(newText);
+//                return true;
+//            }
+//        });
         return myview;
     }
     private void setupSearchView()
     {
-        searchView.setIconifiedByDefault(false);
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setQueryHint("Search Group Name Here");
+//        searchView.setIconifiedByDefault(false);
+//        searchView.setSubmitButtonEnabled(true);
+//        searchView.setQueryHint("Search Group Name Here");
     }
 
     public void ChatAllGroupAsync (){

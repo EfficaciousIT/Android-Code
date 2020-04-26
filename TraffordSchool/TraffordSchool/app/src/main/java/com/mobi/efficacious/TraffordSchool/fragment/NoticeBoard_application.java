@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,7 @@ public class NoticeBoard_application extends Fragment {
                 Schooli_id = "";
             } else {
                 Schooli_id = settings.getString("TAG_SCHOOL_ID", "");
+                Log.d("RESULT234","SHOOL ID"+Schooli_id);
             }
         } catch (Exception ex) {
 
@@ -101,24 +103,24 @@ public class NoticeBoard_application extends Fragment {
         myview.setFocusableInTouchMode(true);
         myview.requestFocus();
         myview.setOnKeyListener(new View.OnKeyListener() {
-                                    @Override
-                                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                try {
-                                                    Noticeboard noticeBoard_application = new Noticeboard();
-                                                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoard_application).commitAllowingStateLoss();
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        try {
+                            Noticeboard noticeBoard_application = new Noticeboard();
+                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoard_application).commitAllowingStateLoss();
 
-                                                } catch (Exception ex) {
+                        } catch (Exception ex) {
 
-                                                }
+                        }
 
 
-                                                return true;
-                                            }
-                                        }
-                                        return false;
-                                    }
+                        return true;
+                    }
+                }
+                return false;
+            }
         });
         dataList = new ArrayList<HashMap<Object, Object>>();
         userid = settings.getString("TAG_USERID", "");
@@ -303,6 +305,7 @@ public class NoticeBoard_application extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     Usertype_selected = String.valueOf(dataList.get(i).get("UserType_id"));
+                    Log.d("RESULT234",Usertype_selected);
                     Issue_Date = IssueDate.getText().toString();
                     End_Date = EndDate.getText().toString();
                     Notice_Detail = Notice.getText().toString();
@@ -343,7 +346,14 @@ public class NoticeBoard_application extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     Standard_selected = String.valueOf(Standard_list.get(i).getIntStandardId());
-                    Schooli_id = String.valueOf(Standard_list.get(i).getIntschoolId());
+                    Log.d("RESULT234","STANDARD ID"+Standard_selected);
+//                    if(Standard_list.get(i).getIntschoolId().equals("") || Standard_list.get(i).getIntschoolId() == null){
+//                         Schooli_id = Schooli_id;
+//                    }else{
+//                        Schooli_id = String.valueOf(Standard_list.get(i).getIntschoolId());
+//                    }
+                    //Schooli_id = String.valueOf(Standard_list.get(i).getIntschoolId());
+                    //Log.d("RESULT234","STANDARD ID SCHOOL ID"+Schooli_id);
                 } catch (Exception ex) {
 
                 }
@@ -471,18 +481,19 @@ public class NoticeBoard_application extends Fragment {
                         Standard.setAdapter(adapter);
                     } catch (Exception ex) {
 
-                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!1", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!2", Toast.LENGTH_SHORT).show();
 
                 }
 
                 @Override
                 public void onComplete() {
+
 
                 }
             });
@@ -492,14 +503,32 @@ public class NoticeBoard_application extends Fragment {
     }
 
     public void SubmitASYNC() {
+        // Toast.makeText(getActivity(), "Response taking time seems Network issue!32222", Toast.LENGTH_SHORT).show();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Processing...");
-            DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-            NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
-            Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
+            DataService service;
+            Observable<ResponseBody> call;
+            NoticeboardDetail noticeboardDetail;
+//            if (Usertype_selected.contentEquals("1")) {
+//                service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+//                Log.d("RESULT234","STANDARD ID"+Standard_selected);
+//                Log.d("RESULT234","SCHOOL ID"+Schooli_id);
+//                noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
+//
+//                call = service.InsertNotice("NoticeBoardStudent", noticeboardDetail);
+//            }else{
+            service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+            noticeboardDetail = new NoticeboardDetail(Integer.parseInt(Usertype_selected), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
+            Log.d("RESULT234","SCHOOL ID: "+Integer.parseInt(Schooli_id));
+            Log.d("RESULT234","ISSUE DATE: "+fromdate);
+            Log.d("RESULT234","END DATE: "+enddate);
+
+            call = service.InsertNotice("insert", noticeboardDetail);
+
+            //    }
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
                 @Override
                 public void onSubscribe(Disposable disposable) {
@@ -512,14 +541,16 @@ public class NoticeBoard_application extends Fragment {
 
                     } catch (Exception ex) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!3", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Notice Created Successfully", Toast.LENGTH_SHORT).show();
+                    Noticeboard noticeBoardTab = new Noticeboard();
+                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoardTab).commitAllowingStateLoss();
 
                 }
 
@@ -532,10 +563,12 @@ public class NoticeBoard_application extends Fragment {
                 }
             });
         } catch (Exception ex) {
+            Toast.makeText(getActivity(), "Response taking time seems Network issue!32222"+ex, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void SubmitAllASYNC() {
+        //Toast.makeText(getActivity(), "I am here", Toast.LENGTH_SHORT).show();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         try {
 
@@ -547,44 +580,49 @@ public class NoticeBoard_application extends Fragment {
                 if (UserAll.contentEquals("2")) {
 
                 } else {
-                    DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-                    NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", Integer.parseInt(Schooli_id));
-                    Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
-                    call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
-                        @Override
-                        public void onSubscribe(Disposable disposable) {
-                            dialog.show();
-                        }
-
-                        @Override
-                        public void onNext(ResponseBody body) {
-                            try {
-
-                            } catch (Exception ex) {
-                                dialog.dismiss();
-                                Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                    if(UserAll.contentEquals("5")) {
+                        DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+                        NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "192.168.1.150", Integer.parseInt(Schooli_id));
+                        Log.d("RESULT234","SCHOOL ID: "+Integer.parseInt(Schooli_id));
+                        Log.d("RESULT234","ISSUE DATE: "+fromdate);
+                        Log.d("RESULT234","END DATE: "+enddate);
+                        Log.d("RESULT234","USER ID: "+Integer.parseInt(UserAll));
+                        Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
+                        call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
+                            @Override
+                            public void onSubscribe(Disposable disposable) {
+                                dialog.show();
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable t) {
-                            dialog.dismiss();
-                            Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onNext(ResponseBody body) {
+                                try {
 
-                        }
+                                } catch (Exception ex) {
+                                    dialog.dismiss();
+                                    Toast.makeText(getActivity(), "Response taking time seems Network issue!5", Toast.LENGTH_SHORT).show();
+                                }
+                            }
 
-                        @Override
-                        public void onComplete() {
-                            if(UserAll.contentEquals("5"))
-                            {
+                            @Override
+                            public void onError(Throwable t) {
                                 dialog.dismiss();
-                                Toast.makeText(getActivity(), "Notice Created Successfully", Toast.LENGTH_SHORT).show();
-                                Noticeboard noticeBoardTab = new Noticeboard();
-                                MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoardTab).commitAllowingStateLoss();
+                                // Toast.makeText(getActivity(), "Response taking time seems Network issue!6", Toast.LENGTH_SHORT).show();
 
                             }
-                        }
-                    });
+
+                            @Override
+                            public void onComplete() {
+                                if (UserAll.contentEquals("5")) {
+                                    dialog.dismiss();
+                                    Toast.makeText(getActivity(), "Notice Created Successfully", Toast.LENGTH_SHORT).show();
+                                    Noticeboard noticeBoardTab = new Noticeboard();
+                                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, noticeBoardTab).commitAllowingStateLoss();
+
+                                }
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -618,24 +656,24 @@ public class NoticeBoard_application extends Fragment {
 
                             } catch (Exception ex) {
                                 dialog.dismiss();
-                                Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Response taking time seems Network issue!7", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onError(Throwable t) {
                             dialog.dismiss();
-                            Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Response taking time seems Network issue!8", Toast.LENGTH_SHORT).show();
 
                         }
 
                         @Override
                         public void onComplete() {
-                                if(UserAll.contentEquals("5"))
-                                {
-                                    dialog.dismiss();
-                                    SubmitAllASYNCByPrincipal2();
-                                }
+                            if(UserAll.contentEquals("5"))
+                            {
+                                dialog.dismiss();
+                                SubmitAllASYNCByPrincipal2();
+                            }
                         }
                     });
                 }
@@ -674,14 +712,14 @@ public class NoticeBoard_application extends Fragment {
 
                             } catch (Exception ex) {
                                 dialog.dismiss();
-                                Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Response taking time seems Network issue!9", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onError(Throwable t) {
                             dialog.dismiss();
-                            Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Response taking time seems Network issue!10", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -727,14 +765,14 @@ public class NoticeBoard_application extends Fragment {
 
                     } catch (Exception ex) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!11", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!12", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -770,14 +808,14 @@ public class NoticeBoard_application extends Fragment {
 
                     } catch (Exception ex) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!13", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!14", Toast.LENGTH_SHORT).show();
 
                 }
 

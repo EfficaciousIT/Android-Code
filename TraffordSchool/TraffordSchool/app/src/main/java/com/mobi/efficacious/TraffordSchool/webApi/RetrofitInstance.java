@@ -17,16 +17,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitInstance {
     private static Retrofit retrofit;
-//192.168.1.150
-    private static final String BASE_URL = "http://122.170.4.112/TraffordWebApi/api/";
-    public static final String Image_URL = "http://122.170.4.112/TraffordWebApi/image/";
+// UAT CODE
+    private static final String BASE_URL = "http://e-smarts.co.in/TraffordWebAPIUAT/api/";
+    public static final String Image_URL = "http://e-smarts.co.in/TraffordWebAPIUAT/image/";
 
 //    private static final String BASE_URL = "http://e-smarts.com/TraffordAPI/api/";
 //    public static final String Image_URL = "http://e-smarts.com/TraffordAPI/image/";
 
     public static final String pdfUrl="http://e-smarts.com/TraffordAPI/PDF/";
 
-        public static final String resultUrl="http://122.170.4.112/traffordresult/result.aspx?";
+    public static final String resultUrl="http://e-smarts.co.in/traffordresult/result.aspx?";
     //public static final String resultUrl=" http://e-smarts.com/TraffordResult/result.aspx?";
 
 

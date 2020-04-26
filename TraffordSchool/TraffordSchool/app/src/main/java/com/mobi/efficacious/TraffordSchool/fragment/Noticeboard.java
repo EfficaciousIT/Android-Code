@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,13 +124,17 @@ public class Noticeboard  extends Fragment {
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
             if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
                  call = service.getDashboardDetails("NoticeBoardPrincipal", academic_id);
-        }else if(role_id.contentEquals("1")||role_id.contentEquals("2"))
+        }else if(role_id.contentEquals("2"))
         {
             call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
         }else if(role_id.contentEquals("3"))
         {
            call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
-        }
+        }else if(role_id.contentEquals("1"))
+            {
+                Log.d("RESULT234",""+intStandard_id+"Sss"+Schooli_id);
+                call = service.getDashboardDetails("NoticeBoardStudent", intStandard_id, Schooli_id);
+            }
         else
         {
              call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
