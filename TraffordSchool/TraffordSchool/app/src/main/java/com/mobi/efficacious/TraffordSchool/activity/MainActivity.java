@@ -130,6 +130,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            MenuItem result = menu.findItem(R.id.nav_Result);
 //            result.setVisible(false);
             if (role_id.contentEquals("1") || role_id.contentEquals("2")) {
+                MenuItem target1;
+                target1 = menu.findItem(R.id.nav_library);
+                target1.setVisible(false);
                 MenuItem message = menu.findItem(R.id.nav_message);
                 message.setVisible(false);
                 MenuItem target = menu.findItem(R.id.nav_dashboard);
@@ -160,6 +163,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             } else if (role_id.contentEquals("3")) {
+                MenuItem target1;
+                target1 = menu.findItem(R.id.nav_library);
+                target1.setVisible(false);
                 try {
                     Teacher_statndard = settings.getString("TAG_STANDERDID", "");
                     Teacher_division = settings.getString("TAG_DIVISIONID", "");

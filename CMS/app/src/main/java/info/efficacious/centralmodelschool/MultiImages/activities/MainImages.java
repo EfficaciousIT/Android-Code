@@ -91,6 +91,8 @@ public class MainImages extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     if (FilePath.size() > 0) {
+
+                        Log.d("Result" , ""+FilePath.size());
                         for (int i = 0; i < FilePath.size(); i++) {
                             UploadAsync(i);
                         }
@@ -206,6 +208,7 @@ public class MainImages extends AppCompatActivity {
                         try {
 
                         } catch (Exception ex) {
+                            FilePath.clear();
                             progressDoalog.dismiss();
                             Toast.makeText(MainImages.this, "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
                         }
@@ -213,7 +216,9 @@ public class MainImages extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable t) {
+
                         progressDoalog.dismiss();
+                        FilePath.clear();
                         Toast.makeText(MainImages.this, "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
 
                     }
@@ -223,6 +228,7 @@ public class MainImages extends AppCompatActivity {
                         progressDoalog.dismiss();
                         if(i==(FilePath.size()-1))
                         {
+                            FilePath.clear();
                             progressDoalog.dismiss();
                             Toast.makeText(MainImages.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
                             Gallery_fragment gallery_fragment = new Gallery_fragment();

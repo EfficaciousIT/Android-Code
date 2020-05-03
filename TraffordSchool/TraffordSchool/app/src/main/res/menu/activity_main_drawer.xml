@@ -64,6 +64,20 @@
                     android:title="Payment" />
             </menu>
         </item>
+
+<!--        <item android:title="Online Class">-->
+<!--            <menu>-->
+<!--                <item-->
+<!--                    android:id="@+id/nav_online_timetable"-->
+<!--                    android:icon="@mipmap/leave"-->
+<!--                    android:title="Online Class Timetable" />-->
+<!--                <item-->
+<!--                    android:id="@+id/nav_online_classes"-->
+<!--                    android:icon="@mipmap/leave"-->
+<!--                    android:title="Online Class Details" />-->
+<!--            </menu>-->
+<!--        </item>-->
+
         <item android:title="Event">
             <menu>
                 <item

@@ -3,6 +3,7 @@ package com.mobi.efficacious.TraffordSchool.entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class DashboardDetail {
     public String getIntBusAlert1() {
         return IntBusAlert1;
@@ -108,6 +109,30 @@ public class DashboardDetail {
     @SerializedName("End_Date")
     @Expose
     private String endDate;
+
+    @SerializedName("vchLecture_name")
+    @Expose
+    private String vchLecture_name;
+
+    @SerializedName("dtLecture_date")
+    @Expose
+    private String dtLecture_date;
+
+    @SerializedName("dtFromTime")
+    @Expose
+    private String dtFromTime;
+
+    @SerializedName("dtToTime")
+    @Expose
+    private String dtToTime;
+
+    @SerializedName("Teacher_name")
+    @Expose
+    private String Teacher_name;
+
+    @SerializedName("vchSubjectName")
+    @Expose
+    private String vchSubjectName;
 
     public Integer getId() {
         return id;
@@ -274,5 +299,53 @@ public class DashboardDetail {
         this.notice = notice;
         this.issueDate = issueDate;
         this.endDate = endDate;
+    }
+
+    public String getVchLecture_name() {
+        return vchLecture_name;
+    }
+
+    public void setVchLecture_name(String vchLecture_name) {
+        this.vchLecture_name = vchLecture_name;
+    }
+
+    public String getDtLecture_date() {
+        return dtLecture_date;
+    }
+
+    public void setDtLecture_date(String dtLecture_date) {
+        this.dtLecture_date = dtLecture_date;
+    }
+
+    public String getDtFromTime() {
+        return dtFromTime;
+    }
+
+    public void setDtFromTime(String dtFromTime) {
+        this.dtFromTime = dtFromTime;
+    }
+
+    public String getDtToTime() {
+        return dtToTime;
+    }
+
+    public void setDtToTime(String dtToTime) {
+        this.dtToTime = dtToTime;
+    }
+
+    public String getTeacher_name() {
+        return Teacher_name;
+    }
+
+    public void setTeacher_name(String teacher_name) {
+        Teacher_name = teacher_name;
+    }
+
+    public String getVchSubjectName() {
+        return vchSubjectName;
+    }
+
+    public void setVchSubjectName(String vchSubjectName) {
+        this.vchSubjectName = vchSubjectName;
     }
 }

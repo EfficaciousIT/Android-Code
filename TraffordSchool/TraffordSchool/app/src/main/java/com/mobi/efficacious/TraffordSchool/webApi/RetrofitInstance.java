@@ -20,14 +20,22 @@ public class RetrofitInstance {
 // UAT CODE
     private static final String BASE_URL = "http://e-smarts.co.in/TraffordWebAPIUAT/api/";
     public static final String Image_URL = "http://e-smarts.co.in/TraffordWebAPIUAT/image/";
+    public static final String pdfUrl="http://e-smarts.com/TraffordAPI/PDF/";
+    public static final String resultUrl="http://www.e-smarts.co.in/TraffordUATResult/result.aspx?";
 
+    // DEMO UAT CODE
+//    private static final String BASE_URL = "http://e-smarts.com/EfficaciousSchoolDemoAPI/api/";
+//    public static final String Image_URL = "http://e-smarts.com/EfficaciousSchoolDemoAPI/image/";
+//    public static final String pdfUrl="http://e-smarts.com/EfficaciousSchoolDemoAPI/PDF/";
+//    public static final String resultUrl="http://e-smarts.com/EfficaciousSchoolDemoAPI/result.aspx?";
+
+
+
+
+    // Production Code
 //    private static final String BASE_URL = "http://e-smarts.com/TraffordAPI/api/";
 //    public static final String Image_URL = "http://e-smarts.com/TraffordAPI/image/";
-
-    public static final String pdfUrl="http://e-smarts.com/TraffordAPI/PDF/";
-
-    public static final String resultUrl="http://e-smarts.co.in/traffordresult/result.aspx?";
-    //public static final String resultUrl=" http://e-smarts.com/TraffordResult/result.aspx?";
+//    public static final String resultUrl=" http://e-smarts.com/TraffordResult/result.aspx?";
 
 
 

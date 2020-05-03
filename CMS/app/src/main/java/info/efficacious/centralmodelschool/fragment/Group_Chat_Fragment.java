@@ -51,7 +51,7 @@ public class Group_Chat_Fragment extends Fragment{
         cd = new ConnectionDetector(getActivity());
         recyclerView = (RecyclerView) myview.findViewById(R.id.chat_listview);
 //        searchView = (++) myview.findViewById(R.id.search_view_member);
-        searchView.setVisibility(View.GONE);
+        //searchView.setVisibility(View.GONE);
 
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
         academic_id = settings.getString("TAG_ACADEMIC_ID", "");

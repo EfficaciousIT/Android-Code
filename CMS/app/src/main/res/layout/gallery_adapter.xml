@@ -16,6 +16,7 @@
         <RelativeLayout
             android:layout_below="@+id/eventDescriptiontv"
             android:id="@+id/relative"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="180dp"
 

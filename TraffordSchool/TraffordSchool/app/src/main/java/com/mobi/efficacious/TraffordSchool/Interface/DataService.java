@@ -62,9 +62,26 @@ public interface DataService {
                                                          @Query("intAcademic_id") String intAcademic_id,
                                                          @Query("intDivision_id") String intDivision_id,
                                                          @Query("intstanderd_id") String intstanderd_id);
+
+
     @GET("Dashboard")
     Observable<DashboardDetailsPojo> getDashboardDetails(@Query("command") String command,
                                                          @Query("intAcademic_id") String intAcademic_id);
+
+    @GET("OnlineClassSchedule")
+    Observable<DashboardDetailsPojo> getOnlineClassDetails(@Query("command") String command,
+                                                           @Query("intTeacher_id") String intTeacher_id,
+                                                           @Query("intAcademic_id") String intAcademic_id,
+                                                           @Query("intSchool_id") String intSchool_id,
+                                                           @Query("intStandard_id") String intStandard_id);
+
+    @GET("OnlineClassTimetable")
+    Observable<DashboardDetailsPojo> getOnlineClassTimetable(@Query("command") String command,
+                                                           @Query("intTeacher_id") String intTeacher_id,
+                                                           @Query("intAcademic_id") String intAcademic_id,
+                                                           @Query("intSchool_id") String intSchool_id,
+                                                           @Query("intStandard_id") String intStandard_id);
+
 //Standard
     @GET("Standard")
     Observable<StandardDetailsPojo> getStandardDetails(@Query("command") String command,

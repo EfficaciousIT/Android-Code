@@ -208,6 +208,7 @@ public class MainImages extends AppCompatActivity {
                                 try {
 
                                 } catch (Exception ex) {
+                                    FilePath.clear();
                                     progressDoalog.dismiss();
                                     Toast.makeText(MainImages.this, "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
                                 }
@@ -215,6 +216,7 @@ public class MainImages extends AppCompatActivity {
 
                             @Override
                             public void onError(Throwable t) {
+                                FilePath.clear();
                                 progressDoalog.dismiss();
                                 Toast.makeText(MainImages.this, "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
 
@@ -225,6 +227,7 @@ public class MainImages extends AppCompatActivity {
                                 progressDoalog.dismiss();
                                 if(i==(FilePath.size()-1))
                                 {
+                                    FilePath.clear();
                                     progressDoalog.dismiss();
                                     Toast.makeText(MainImages.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
                                     Gallery_Folder gallery_folder = new Gallery_Folder();

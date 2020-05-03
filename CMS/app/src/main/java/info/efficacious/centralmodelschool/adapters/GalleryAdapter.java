@@ -13,12 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 
@@ -67,12 +72,33 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             school_id=settings.getString("TAG_SCHOOL_ID", "");
             String url= RetrofitInstance.Image_URL+data.get(position).getName();
             Log.d("TAG","onBindViewHolderURL"+url);
+            holder.rl_image.setVisibility(View.VISIBLE);
 
-                Glide.with(mcontext)
-                        .load(url)
-                        .fitCenter()// image url
-                        .error(R.mipmap.profile)
-                        .into(holder.image);
+            Glide.with(mcontext)
+                    .load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .dontAnimate()
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+
+                            //Log.d(TAG,e.getLocalizedMessage(),e);
+                            holder.rl_image.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(holder.image);
+
+//                Glide.with(mcontext)
+//                        .load(url)
+//                        .fitCenter()// image url
+//                        .error(R.mipmap.profile)
+//                        .into(holder.image);
 
 
             setImageMethod(RetrofitInstance.Image_URL,data.get(position).getName(),holder.image);
@@ -100,10 +126,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView eventDescriptiontv;
         ImageView image ;
+        RelativeLayout rl_image;
         public ViewHolder(View itemView) {
             super(itemView);
             eventDescriptiontv=(TextView)itemView.findViewById(R.id.eventDescriptiontv);
             image = (ImageView) itemView.findViewById(R.id.image);
+            rl_image = itemView.findViewById(R.id.relative);
         }
     }
     private void setImageMethod(String baseUrl,String subUrl,ImageView view){
