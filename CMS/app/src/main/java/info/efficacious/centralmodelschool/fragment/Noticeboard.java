@@ -119,6 +119,7 @@ public class Noticeboard extends Fragment {
 
     public void NoticeboardAsync() {
         try {
+            Log.d("RESULT234",role_id);
             Observable<DashboardDetailsPojo> call;
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
             if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
@@ -128,8 +129,11 @@ public class Noticeboard extends Fragment {
                 call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
             }else if(role_id.contentEquals("3"))
             {
-                call = service.getDashboardDetails("NoticeBoard", academic_id, Schooli_id);
-            }else if(role_id.contentEquals("1"))
+                call = service.getDashboardDetails("NoticeBoardTeacher", academic_id, Schooli_id);
+            }else if(role_id.contentEquals("4")) {
+                call = service.getDashboardDetails("NoticeBoardStaff", academic_id, Schooli_id);
+            }
+            else if(role_id.contentEquals("1"))
             {
                 Log.d("RESULT234",""+intStandard_id+"Sss"+Schooli_id);
                 call = service.getDashboardDetail("NoticeBoardStudent", intStandard_id, Schooli_id);

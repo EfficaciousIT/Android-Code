@@ -32,7 +32,7 @@ public class RetrofitInstance {
     //    UAT Links CMSWebApi
     private static final String BASE_URL = "http://e-smarts.co.in/CMSWEBAPIUAT/api/";
     public static final String Image_URL = "http://e-smarts.co.in/CMSWEBAPIUAT/image/";
-    public static final String resultUrl="http://e-smarts.co.in/CMSWEBAPIUAT/Result.aspx?";
+    public static final String resultUrl="http://www.e-smarts.co.in/CMSResultUAT/result.aspx?";
     public static final String readmisiionUrl="http://e-smarts.co.in/cmsuat/frmReAdmissionForm.aspx?";
 
     //PRODUCTION LINK

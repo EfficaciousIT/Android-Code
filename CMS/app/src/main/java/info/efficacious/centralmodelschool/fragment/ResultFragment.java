@@ -54,7 +54,7 @@ public class ResultFragment extends Fragment {
         webView=view.findViewById(R.id.webview);
         progress.show();
 
-        String url= RetrofitInstance.resultUrl+"strStudentId="+User_id+"&strStandardId="+student_id+"&strAcademicId="+academic_id+"&strschoolid="+school_id;
+        String url= RetrofitInstance.resultUrl+"strStudentId="+User_id+"&strStandardId="+student_id+"&strAcademicId="+academic_id+"&strSchoolId="+school_id;
 
         //Toast.makeText(getContext(),""+url,Toast.LENGTH_LONG).show();
         Log.d("URL","Url"+url);

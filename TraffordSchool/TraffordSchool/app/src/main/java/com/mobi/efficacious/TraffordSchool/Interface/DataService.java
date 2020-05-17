@@ -63,6 +63,12 @@ public interface DataService {
                                                          @Query("intDivision_id") String intDivision_id,
                                                          @Query("intstanderd_id") String intstanderd_id);
 
+    @GET("Dashboard")
+    Observable<DashboardDetailsPojo> getDashboardDetailStudent(@Query("command") String command,
+                                                         @Query("intAcademic_id") String intAcademic_id,
+                                                         @Query("intSchool_id") String intSchool_id,
+                                                         @Query("intstanderd_id") String intstanderd_id);
+
 
     @GET("Dashboard")
     Observable<DashboardDetailsPojo> getDashboardDetails(@Query("command") String command,

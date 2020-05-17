@@ -240,11 +240,11 @@ public class MainImages extends AppCompatActivity {
 
             } catch (Exception ex) {
 
-
+                FilePath.clear();
             }
 
         } catch (Exception ex) {
-
+            FilePath.clear();
         }
     }
     public String compressImage(String imageUri) {
