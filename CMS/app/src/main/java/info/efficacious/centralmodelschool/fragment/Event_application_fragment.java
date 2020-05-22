@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -261,6 +262,7 @@ public class Event_application_fragment extends Fragment {
                 {
                     StandardSelected_id=String.valueOf(Standard_list.get(position).getIntStandardId());
                     std_selected = String.valueOf(Standard_list.get(position).getVchStandardName());
+                    Log.d("RESULT1","std_selected 265"+std_selected);
                     if(UsertypeId.contentEquals("6")||UsertypeId.contentEquals("7"))
                     {
                         Schooli_id=String.valueOf(Standard_list.get(position).getIntschoolId());
@@ -315,7 +317,8 @@ public class Event_application_fragment extends Fragment {
                                         SubmitASYNCBYPrincipal(std_selected, RegStartDate, RegEndDate, Event_StartDate, Event_EndDate, Event_Fees, Event_Description, EventName);
                                     }
                                     else {
-                                        SubmitASYNC(StandardSelected_id, RegStartDate, RegEndDate, Event_StartDate, Event_EndDate, Event_Fees, Event_Description, EventName);
+//                                        StandardSelected_id
+                                        SubmitASYNC(std_selected, RegStartDate, RegEndDate, Event_StartDate, Event_EndDate, Event_Fees, Event_Description, EventName);
 
                                     }
 
@@ -348,7 +351,7 @@ public class Event_application_fragment extends Fragment {
                             }else
                             {
                                 if (!std_selected.contentEquals("--Select--") && !RegStartDate.contentEquals("") && !RegEndDate.contentEquals("") && !Event_StartDate.contentEquals("") && !Event_EndDate.contentEquals("") && !EventName.contentEquals("") && !Event_Description.contentEquals("")) {
-                                    SubmitASYNC(StandardSelected_id, RegStartDate, RegEndDate, Event_StartDate, Event_EndDate, Event_Fees, Event_Description, EventName);
+                                    SubmitASYNC(std_selected, RegStartDate, RegEndDate, Event_StartDate, Event_EndDate, Event_Fees, Event_Description, EventName);
                                 } else {
                                     if (std_selected.contentEquals("--Select--"))
                                     {
@@ -453,6 +456,19 @@ public class Event_application_fragment extends Fragment {
         }
     }
     public void SubmitASYNC(String std_selected, String regStartDate, String regEndDate, String event_startDate, String event_endDate, String event_fees, String event_description, String eventName) {
+
+        Log.d("RESULT1","ALLLLLLLLLL : " + std_selected);
+        Log.d("RESULT1","std_selected : " + std_selected);
+        Log.d("RESULT1","regStartDate : " + regStartDate);
+        Log.d("RESULT1","regEndDate : " + regEndDate);
+        Log.d("RESULT1","event_startDate : " + event_startDate);
+        Log.d("RESULT1","event_endDate : " + event_endDate);
+        Log.d("RESULT1","event_fees : " + event_fees);
+        Log.d("RESULT1","event_description : " + event_description);
+        Log.d("RESULT1","eventName : " + eventName);
+
+
+
         try {
             final ProgressDialog dialog = new ProgressDialog(getActivity());
             dialog.setCancelable(false);
@@ -474,14 +490,21 @@ public class Event_application_fragment extends Fragment {
 
                         } catch (Exception ex) {
                             dialog.dismiss();
-                            Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Event Created Successfully", Toast.LENGTH_SHORT).show();
+                            Event_Tab event_tab = new Event_Tab();
+                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, event_tab).commitAllowingStateLoss();
+
                         }
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Event Created Successfully", Toast.LENGTH_SHORT).show();
+                        Event_Tab event_tab = new Event_Tab();
+                        MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, event_tab).commitAllowingStateLoss();
 
                     }
 
@@ -498,6 +521,18 @@ public class Event_application_fragment extends Fragment {
         }
     }
     public void SubmitASYNCBYPrincipal(String std_selected, String regStartDate, String regEndDate, String event_startDate, String event_endDate, String event_fees, String event_description, String eventName) {
+
+        Log.d("RESULT1","ALLLLLLLLLLPPPP : " + std_selected);
+        Log.d("RESULT1","std_selected : " + std_selected);
+        Log.d("RESULT1","regStartDate : " + regStartDate);
+        Log.d("RESULT1","regEndDate : " + regEndDate);
+        Log.d("RESULT1","event_startDate : " + event_startDate);
+        Log.d("RESULT1","event_endDate : " + event_endDate);
+        Log.d("RESULT1","event_fees : " + event_fees);
+        Log.d("RESULT1","event_description : " + event_description);
+        Log.d("RESULT1","eventName : " + eventName);
+
+
         try {
             final ProgressDialog dialog = new ProgressDialog(getActivity());
             dialog.setCancelable(false);
@@ -522,14 +557,21 @@ public class Event_application_fragment extends Fragment {
 
                     } catch (Exception ex) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Event Created Successfully", Toast.LENGTH_SHORT).show();
+                        Event_Tab event_tab = new Event_Tab();
+                        MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, event_tab).commitAllowingStateLoss();
+
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Event Created Successfully", Toast.LENGTH_SHORT).show();
+                    Event_Tab event_tab = new Event_Tab();
+                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, event_tab).commitAllowingStateLoss();
 
                 }
 

@@ -53,6 +53,8 @@ import info.efficacious.centralmodelschool.fragment.LeaveListFragment;
 import info.efficacious.centralmodelschool.fragment.MessageCenter;
 import info.efficacious.centralmodelschool.fragment.MessagingFragment;
 import info.efficacious.centralmodelschool.fragment.Noticeboard;
+import info.efficacious.centralmodelschool.fragment.OnlineClassDetail;
+import info.efficacious.centralmodelschool.fragment.OnlineClassTimetable;
 import info.efficacious.centralmodelschool.fragment.ParentDashboard;
 import info.efficacious.centralmodelschool.fragment.Profile;
 import info.efficacious.centralmodelschool.fragment.Profile_Fragment;
@@ -126,6 +128,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             result.setVisible(false);
             admission.setVisible(false);
 
+            MenuItem online_timetable = menu.findItem(R.id.nav_online_timetable);
+            online_timetable.setVisible(true);
+            MenuItem online_classes = menu.findItem(R.id.nav_online_classes);
+            online_classes.setVisible(true);
+
             if (role_id.contentEquals("1") || role_id.contentEquals("2")) {
                 // Student parent Login
                 MenuItem message = menu.findItem(R.id.nav_message);
@@ -145,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 result.setVisible(true);
                 admission.setVisible(true);
+
+
 
                 if (!cd.isConnectingToInternet()) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -173,6 +182,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 payment.setVisible(false);
                 MenuItem aboutus = menu.findItem(R.id.nav_about_us);
                 aboutus.setVisible(true);
+
+
+
                 if (!cd.isConnectingToInternet()) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
                     alert.setMessage("No Internet Connection");
@@ -639,6 +651,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         }
 
+                    }else if (id == R.id.nav_online_timetable) {
+                        try {
+                            title = "Online Timetable";
+                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                        }
+                    }
+                    else if (id == R.id.nav_online_classes) {
+                        try {
+                            title = "Online Class Detail";
+                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassDetail()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                        }
                     }
 
                 }
@@ -835,6 +860,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         }
 
+                    } else if (id == R.id.nav_online_timetable) {
+                        try {
+                            title = "Online Timetable";
+                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                        }
+                    }
+                    else if (id == R.id.nav_online_classes) {
+                        try {
+                            title = "Online Class Detail";
+                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassDetail()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                        }
                     }
 
                 }
@@ -1055,6 +1093,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         }
 
+                    }else if (id == R.id.nav_online_timetable) {
+                        try {
+                            title = "Online Timetable";
+                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                        }
+                    }
+                    else if (id == R.id.nav_online_classes) {
+                        try {
+                            title = "Online Class Detail";
+                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassDetail()).commitAllowingStateLoss();
+                        } catch (Exception ex) {
+                        }
                     }
 
                 }

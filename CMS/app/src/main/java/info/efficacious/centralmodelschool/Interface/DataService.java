@@ -16,6 +16,9 @@ import info.efficacious.centralmodelschool.entity.LoginDetailsPojo;
 import info.efficacious.centralmodelschool.entity.Message;
 import info.efficacious.centralmodelschool.entity.MessagePojo;
 import info.efficacious.centralmodelschool.entity.NoticeboardDetail;
+import info.efficacious.centralmodelschool.entity.OnlineClassDetailPojo;
+import info.efficacious.centralmodelschool.entity.OnlineClassDetailsPojo;
+import info.efficacious.centralmodelschool.entity.OnlineClassTimetablePojo;
 import info.efficacious.centralmodelschool.entity.ProfileDetail;
 import info.efficacious.centralmodelschool.entity.ProfileDetailsPojo;
 import info.efficacious.centralmodelschool.entity.SchoolDetailsPojo;
@@ -66,6 +69,26 @@ public interface DataService {
                                        @Query("intStandard_id") String intStandard_id,
                                        @Query("intAcademic_id") String intAcademic_id
                                     );
+
+    @GET("OnlineClassTimetable")
+    Observable<OnlineClassTimetablePojo> getOnlineClassTimetableS(@Query("command") String command,
+                                                                  @Query("intAcademic_id") String intAcademic_id,
+                                                                  @Query("intSchool_id") String intSchool_id,
+                                                                  @Query("intStandard_id") String intStandard_id,
+                                                                  @Query("dtLecture_date") String dtLecture_date);
+
+    @GET("OnlineClassTimetable")
+    Observable<OnlineClassTimetablePojo> getOnlineClassTimetable(@Query("command") String command,
+                                                                 @Query("intTeacher_id") String intTeacher_id,
+                                                                 @Query("intAcademic_id") String intAcademic_id,
+                                                                 @Query("intSchool_id") String intSchool_id,
+                                                                 @Query("dtLecture_date") String dtLecture_date);
+
+    @GET("OnlineClassTimetable")
+    Observable<OnlineClassTimetablePojo> getOnlineClassTimetable(@Query("command") String command,
+                                                                 @Query("intAcademic_id") String intAcademic_id,
+                                                                 @Query("intSchool_id") String intSchool_id,
+                                                                 @Query("dtLecture_date") String dtLecture_date);
 
 
     @GET("Dashboard")
@@ -202,6 +225,32 @@ public interface DataService {
                                                 @Query("intSchool_id") String intSchool_id,
                                                 @Query("intUser_id") String intUser_id
     );
+
+    @GET("OnlineClassSchedule")
+    Observable<OnlineClassDetailPojo> getOnlineClassDetails(@Query("command") String command,
+                                                            @Query("intAcademic_id") String intAcademic_id,
+                                                            @Query("intSchool_id") String intSchool_id,
+                                                            @Query("intStandard_id") String intStandard_id,
+                                                            @Query("dtLecture_date") String dtLecture_date);
+    @GET("OnlineClassSchedule")
+    Observable<OnlineClassDetailPojo> getOnlineClassDetails(@Query("command") String command,
+                                                            @Query("intAcademic_id") String intAcademic_id,
+                                                            @Query("intSchool_id") String intSchool_id,
+                                                            @Query("dtLecture_date") String dtLecture_date);
+    @GET("OnlineClassSchedule")
+    Observable<OnlineClassDetailPojo> getOnlineClassDetailsT(@Query("command") String command,
+                                                             @Query("intAcademic_id") String intAcademic_id,
+                                                             @Query("intSchool_id") String intSchool_id,
+                                                             @Query("intTeacher_id") String intTeacher_id,
+                                                             @Query("dtLecture_date") String dtLecture_date);
+															 
+    @GET("OnlineClassTimetable")
+    Observable<OnlineClassDetailsPojo> getOnlineTTdetailById(@Query("command") String command,
+                                                             @Query("intAcademic_id") String intAcademic_id,
+                                                             @Query("intSchool_id") String intSchool_id,
+                                                             @Query("intOnlinelecture_id") String intOnlinelecture_id);
+
+
 
     @Headers({
             "Accept: application/json",
