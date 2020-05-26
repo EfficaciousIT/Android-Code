@@ -67,7 +67,7 @@ public class ApplyLeaveFragment extends Fragment {
     Button submit,dateimgfrm,dateimgto;
     TextView monthtvFrm,yeartvFrm,monthtvto,yeartvto;
     private Calendar calendar;
-    private int year, month, day;
+    private int year, month,day;
     String FromDate="",ToDate="";
     private ProgressDialog progress;
     String MLCOunt,CLCount,Leave_Type="",vchReason;
@@ -122,14 +122,14 @@ public class ApplyLeaveFragment extends Fragment {
         yeartvto = (TextView)  myview.findViewById(R.id.yeartvto);
         try
         {
-            if(UsertypeId.contentEquals("3"))
+            if(UsertypeId.contentEquals("3")||UsertypeId.contentEquals("4"))
             {
                 LeaveType_realative.setVisibility(View.VISIBLE);
             }else
             {
                 LeaveType_realative.setVisibility(View.GONE);
             }
-            if(UsertypeId.contentEquals("3"))
+            if(UsertypeId.contentEquals("3")||UsertypeId.contentEquals("4"))
             {
                 LeaveCountASNYC();
             }
@@ -153,11 +153,11 @@ public class ApplyLeaveFragment extends Fragment {
                                                   int monthOfYear, int dayOfMonth) {
                                 try {
                                     NumberFormat f = new DecimalFormat("00");
-                                    FromDate=((f.format(monthOfYear +1))+"/"+(f.format(dayOfMonth))+"/"+year );
-                                  String Date=String.valueOf(f.format(dayOfMonth));
+                                    FromDate=((f.format(dayOfMonth))+"/"+(f.format(monthOfYear +1))+"/"+year );
+                                    String Date=String.valueOf(f.format(dayOfMonth));
                                     dateimgfrm.setText(Date);
                                     dateimgfrm.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.darkgreen));
-                                   String Month=String.valueOf(f.format(monthOfYear +1));
+                                    String Month=String.valueOf(f.format(monthOfYear +1));
                                     if(Month.contentEquals("01"))
                                     {
                                         monthtvFrm.setText("JAN");
@@ -227,7 +227,7 @@ public class ApplyLeaveFragment extends Fragment {
                                 try
                                 {
                                     NumberFormat f = new DecimalFormat("00");
-                                    ToDate=((f.format(monthOfYear +1))+"/"+(f.format(dayOfMonth))+"/"+year );
+                                    ToDate=((f.format(dayOfMonth))+"/"+(f.format(monthOfYear +1))+"/"+year );
                                     String Date=String.valueOf(f.format(dayOfMonth));
                                     dateimgto.setText(Date);
                                     dateimgto.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.darkred));
@@ -332,153 +332,131 @@ public class ApplyLeaveFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                        //set icon
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        //set title
-                        .setTitle("Are you sure Apply Leave?")
-                        //set message
-//                        .setMessage("Exiting will call finish() method")
-                        //set positive button
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //set what would happen when positive button is clicked
-//                                finish();
-                                callsubmitClickEvent();
+                if (!cd.isConnectingToInternet())
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setMessage("No InternetConnection");
+                    alert.setPositiveButton("OK",null);
+                    alert.show();
+
+                }
+                else {
+                   // SimpleDateFormat myFormat = new SimpleDateFormat("MM/dd/yyyy");
+                    SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    if (FromDate.contentEquals("") || ToDate.contentEquals("") || reason.getText().toString().contentEquals("")) {
+                        if (TextUtils.isEmpty(FromDate)) {
+                            dateimgfrm.setError("Enter Valid From Date ");
+                        }
+                        if (TextUtils.isEmpty(ToDate)) {
+                            dateimgto.setError("Enter Valid To Date ");
+                        }
+                        if (TextUtils.isEmpty(reason.getText().toString())) {
+                            reason.setError("Enter Reason of Leave ");
+                        }
+                    } else {
+                        String inputString1 = FromDate;
+                        String inputString2 = ToDate;
+                        try {
+                            Date date1 = myFormat.parse(inputString1);
+                            Date date2 = myFormat.parse(inputString2);
+                            long diff = date2.getTime() - date1.getTime();
+                            int dayscoun = Integer.parseInt(String.valueOf(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)));
+                            if (dayscoun >= 0) {
+                                TotalDaysCount = String.valueOf(dayscoun + 1);
+                                Toast.makeText(getActivity(), String.valueOf("Days: " + TotalDaysCount), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast toast = Toast.makeText(getActivity(),
+                                        "Please Select Proper Date",
+                                        Toast.LENGTH_SHORT);
+                                View toastView = toast.getView();
+                                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                toastView.setBackgroundResource(R.drawable.no_data_available);
+                                toast.show();
                             }
-                        })
-                        //set negative button
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //set what should happen when negative button is clicked
-                                Toast.makeText(getContext(),"You Cancelled Leave!!!",Toast.LENGTH_LONG).show();
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if(UsertypeId.contentEquals("3")||UsertypeId.contentEquals("4"))
+                        {
+                            if(Leave_Type.contentEquals("--Select--")||Leave_Type.contentEquals(""))
+                            {
+                                setSpinnerError(spinner_Leavetype,"Select valid Leave Type ");
+                            }else
+                            {
+                                try
+                                {
+                                    AdminAsync();
+                                }catch (Exception ex)
+                                {
+
+                                }
+
                             }
-                        })
-                        .show();
+
+
+                        }else
+                        {
+                            try
+                            {
+                                AdminAsync ();
+                            }catch (Exception ex)
+                            {
+
+                            }
+
+                        }
+                    }
+                }
 
             }
         });
         return myview;
     }
-
-    private void callsubmitClickEvent() {
-        if (!cd.isConnectingToInternet())
-        {
-
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            alert.setMessage("No InternetConnection");
-            alert.setPositiveButton("OK",null);
-            alert.show();
-
-        }
-        else {
-            SimpleDateFormat myFormat = new SimpleDateFormat("MM/dd/yyyy");
-            if (FromDate.contentEquals("") || ToDate.contentEquals("") || reason.getText().toString().contentEquals("")) {
-                if (TextUtils.isEmpty(FromDate)) {
-                    dateimgfrm.setError("Enter Valid From Date ");
-                }
-                if (TextUtils.isEmpty(ToDate)) {
-                    dateimgto.setError("Enter Valid To Date ");
-                }
-                if (TextUtils.isEmpty(reason.getText().toString())) {
-                    reason.setError("Enter Reason of Leave ");
-                }
-            } else {
-                String inputString1 = FromDate;
-                String inputString2 = ToDate;
-                try {
-                    Date date1 = myFormat.parse(inputString1);
-                    Date date2 = myFormat.parse(inputString2);
-                    long diff = date2.getTime() - date1.getTime();
-                    int dayscoun = Integer.parseInt(String.valueOf(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)));
-                    if (dayscoun >= 0) {
-                        TotalDaysCount = String.valueOf(dayscoun + 1);
-                        Toast.makeText(getActivity(), String.valueOf("Days: " + TotalDaysCount), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast toast = Toast.makeText(getActivity(),
-                                "Please Select Proper Date",
-                                Toast.LENGTH_SHORT);
-                        View toastView = toast.getView();
-                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                        toastView.setBackgroundResource(R.drawable.no_data_available);
-                        toast.show();
-                    }
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if(UsertypeId.contentEquals("3"))
-                {
-                    if(Leave_Type.contentEquals("--Select--")||Leave_Type.contentEquals(""))
-                    {
-                        setSpinnerError(spinner_Leavetype,"Select valid Leave Type ");
-                    }else
-                    {
-                        try
-                        {
-                            AdminAsync();
-                        }catch (Exception ex)
-                        {
-
-                        }
-
-                    }
-
-
-                }else
-                {
-                    try
-                    {
-                        AdminAsync ();
-                    }catch (Exception ex)
-                    {
-
-                    }
-
-                }
-            }
-        }
-    }
-
     public void  LeaveCountASNYC (){
-    try {
-        DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-        Observable<LeaveDetailPojo> call = service.getLeaveDetailDetails("SelectLeaveCount",Year_id,UsertypeId,UserId,Schooli_id,UserId);
-        call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<LeaveDetailPojo>() {
-            @Override
-            public void onSubscribe(Disposable disposable) {
-                progress.show();
+        try {
+            String command="";
+            if(UsertypeId.contentEquals("3"))
+            {
+                command="SelectLeaveCount";
             }
-
-            @Override
-            public void onNext(LeaveDetailPojo body) {
-                try {
-                    generateLeaveList((ArrayList<LeaveDetail>) body.getLeaveDetail());
-                } catch (Exception ex) {
-                    progress.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+            else if(UsertypeId.contentEquals("4"))
+            {
+                command="SelectLeaveCountStaff";
+            }
+            DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+            Observable<LeaveDetailPojo> call = service.getLeaveDetailDetails(command,Year_id,UsertypeId,UserId,Schooli_id,UserId);
+            call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<LeaveDetailPojo>() {
+                @Override
+                public void onSubscribe(Disposable disposable) {
+                    progress.show();
                 }
-            }
 
-            @Override
-            public void onError(Throwable t) {
-                progress.dismiss();
-                Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onNext(LeaveDetailPojo body) {
+                    try {
+                        generateLeaveList((ArrayList<LeaveDetail>) body.getLeaveDetail());
+                    } catch (Exception ex) {
+                        progress.dismiss();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onError(Throwable t) {
+                    progress.dismiss();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                }
 
-            }
+                @Override
+                public void onComplete() {
+                    progress.dismiss();
 
-            @Override
-            public void onComplete() {
-                progress.dismiss();
-
-            }
-        });
-    } catch (Exception ex) {
-        progress.dismiss();
+                }
+            });
+        } catch (Exception ex) {
+            progress.dismiss();
+        }
     }
-}
 
     public void generateLeaveList(ArrayList<LeaveDetail> taskListDataList) {
         try {
@@ -498,15 +476,18 @@ public class ApplyLeaveFragment extends Fragment {
 
         } catch (Exception ex) {
             progress.dismiss();
-            Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
         }
     }
     public void  AdminAsync (){
         try {
             vchReason=reason.getText().toString();
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
+            Log.d("RESULT123",  ""+ Integer.parseInt(UserId));
+            Log.d("RESULT123",  ""+ Integer.parseInt(Schooli_id));
+            Log.d("RESULT123",  ""+ Integer.parseInt(Year_id));
+            Log.d("RESULT123", Integer.parseInt(UsertypeId)+ "1" + Integer.parseInt(UserId) + Integer.parseInt(Schooli_id) + "1" + Integer.parseInt(Year_id)+vchReason+FromDate+ToDate + Integer.parseInt(TotalDaysCount) + Leave_Type +"0" +UserName);
             LeaveDetail leaveDetail = new LeaveDetail(Integer.parseInt(UsertypeId),1, Integer.parseInt(UserId), Integer.parseInt(Schooli_id), 1, Integer.parseInt(Year_id),vchReason,FromDate,ToDate, Integer.parseInt(TotalDaysCount),Leave_Type,"0",UserName);
-            Log.e("leaveDetail","--"+leaveDetail.toString());
             Observable<ResponseBody> call = service.updateLeaveDetail("insert",leaveDetail);
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
                 @Override
@@ -517,20 +498,17 @@ public class ApplyLeaveFragment extends Fragment {
                 @Override
                 public void onNext(ResponseBody body) {
                     try {
-                        Log.e("ApplyleaveFragment","---"+body.toString());
 
                     } catch (Exception ex) {
                         progress.dismiss();
-                        Log.e("applyfragment","exception= "+ex.toString());
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     progress.dismiss();
-                    Log.e("applyfragment","exception Throwable= "+t.toString());
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -538,7 +516,7 @@ public class ApplyLeaveFragment extends Fragment {
                 public void onComplete() {
                     progress.dismiss();
                     try {
-                            Toast.makeText(getActivity(), "Leave Applied Successfully", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Leave Applied Successfully", Toast.LENGTH_LONG).show();
                         LeaveListFragment leaveListFragment = new LeaveListFragment();
                         MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, leaveListFragment).commit();
 

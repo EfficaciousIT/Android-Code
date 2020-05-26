@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,7 @@ public class OnlineClassTimetable extends Fragment {
     private ProgressDialog progress;
     WeekCalendar weekCalendar;
     String strSelectedDt;
+    String stand_id;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myview=inflater.inflate(R.layout.onlineclassdetail,null);
@@ -75,6 +77,15 @@ public class OnlineClassTimetable extends Fragment {
         SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
         Date todayDate = new Date();
         strSelectedDt = currentDate.format(todayDate);
+
+        try {
+
+            stand_id = getArguments().getString("std_id");
+            Log.d("RESULT123",stand_id);
+        } catch (Exception ex) {
+
+        }
+
         try{
             if(role_id.contentEquals("1")||role_id.contentEquals("2")){
                 intStandard_id= settings.getString("TAG_STANDERDID", "");
@@ -126,12 +137,8 @@ public class OnlineClassTimetable extends Fragment {
                 call = service.getOnlineClassTimetableS("StandardWiseList", academic_id, Schooli_id, intStandard_id,strSelectedDt);
             }
             // Admin
-            else if(role_id.contentEquals("5")){
-                call = service.getOnlineClassTimetable("AdminWiseList", academic_id, Schooli_id,strSelectedDt);
-            }
-            //Teachers
-            else if(role_id.contentEquals("3")){
-                call = service.getOnlineClassTimetable("TeacherWiseList", teacher_Id, academic_id, Schooli_id,strSelectedDt);
+            else if(role_id.contentEquals("5") || role_id.contentEquals("3")){
+                call = service.getOnlineClassTimetableS("StandardWiseList", academic_id, Schooli_id,stand_id,strSelectedDt);
             }
 
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<OnlineClassTimetablePojo>() {

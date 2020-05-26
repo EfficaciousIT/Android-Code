@@ -55,6 +55,8 @@ import info.efficacious.centralmodelschool.fragment.MessagingFragment;
 import info.efficacious.centralmodelschool.fragment.Noticeboard;
 import info.efficacious.centralmodelschool.fragment.OnlineClassDetail;
 import info.efficacious.centralmodelschool.fragment.OnlineClassTimetable;
+import info.efficacious.centralmodelschool.fragment.OnlineTimeDetailStandard;
+import info.efficacious.centralmodelschool.fragment.OnlineTimeTableStandard;
 import info.efficacious.centralmodelschool.fragment.ParentDashboard;
 import info.efficacious.centralmodelschool.fragment.Profile;
 import info.efficacious.centralmodelschool.fragment.Profile_Fragment;
@@ -653,15 +655,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }else if (id == R.id.nav_online_timetable) {
                         try {
-                            title = "Online Timetable";
-                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+//                            title = "Online Timetable";
+//                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+                            title = "Online class Timetable";
+                            OnlineTimeTableStandard studentAttendanceActivity = new OnlineTimeTableStandard();
+                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, studentAttendanceActivity).commitAllowingStateLoss();
+
                         } catch (Exception ex) {
                         }
                     }
                     else if (id == R.id.nav_online_classes) {
                         try {
                             title = "Online Class Detail";
-                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassDetail()).commitAllowingStateLoss();
+                            //mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassDetail()).commitAllowingStateLoss();
+                            OnlineTimeDetailStandard studentAttendanceActivity = new OnlineTimeDetailStandard();
+                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, studentAttendanceActivity).commitAllowingStateLoss();
                         } catch (Exception ex) {
                         }
                     }
@@ -862,15 +870,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     } else if (id == R.id.nav_online_timetable) {
                         try {
-                            title = "Online Timetable";
-                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+//                            title = "Online Timetable";
+//                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+                            title = "Online class Timetable";
+                            OnlineTimeTableStandard studentAttendanceActivity = new OnlineTimeTableStandard();
+                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, studentAttendanceActivity).commitAllowingStateLoss();
                         } catch (Exception ex) {
                         }
                     }
                     else if (id == R.id.nav_online_classes) {
                         try {
                             title = "Online Class Detail";
-                            mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassDetail()).commitAllowingStateLoss();
+                           // mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassDetail()).commitAllowingStateLoss();
+                            OnlineTimeDetailStandard studentAttendanceActivity = new OnlineTimeDetailStandard();
+                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, studentAttendanceActivity).commitAllowingStateLoss();
                         } catch (Exception ex) {
                         }
                     }
@@ -1095,8 +1108,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }else if (id == R.id.nav_online_timetable) {
                         try {
-                            title = "Online Timetable";
+                            title = "Online class Timetable";
                             mfragment.beginTransaction().replace(R.id.content_main, new OnlineClassTimetable()).commitAllowingStateLoss();
+
                         } catch (Exception ex) {
                         }
                     }

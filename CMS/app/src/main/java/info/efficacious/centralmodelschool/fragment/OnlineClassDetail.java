@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +62,9 @@ public class OnlineClassDetail extends Fragment {
     WeekCalendar weekCalendar;
     String strSelectedDt;
     TextView month_tv;
+    String stand_id;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myview=inflater.inflate(R.layout.online_class,null);
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
@@ -80,6 +84,14 @@ public class OnlineClassDetail extends Fragment {
                 intStandard_id= settings.getString("TAG_STANDERDID", "");
             }
         }catch (Exception ex){}
+
+        try {
+
+            stand_id = getArguments().getString("std_id");
+            Log.d("RESULT123",stand_id);
+        } catch (Exception ex) {
+
+        }
 
         progress = new ProgressDialog(getActivity());
         progress.setCancelable(false);
@@ -126,13 +138,13 @@ public class OnlineClassDetail extends Fragment {
                 call = service.getOnlineClassDetails("StudentNotification", academic_id, Schooli_id, intStandard_id,strSelectedDt);
             }
             // Admin
-            else if(role_id.contentEquals("5")){
-                call = service.getOnlineClassDetails("AdminNotification", academic_id, Schooli_id,strSelectedDt);
+            else if(role_id.contentEquals("5") || role_id.contentEquals("3")){
+                call = service.getOnlineClassDetails("StudentNotification", academic_id, Schooli_id,stand_id,strSelectedDt);
             }
             //Teachers
-            else if(role_id.contentEquals("3")){
-                call = service.getOnlineClassDetailsT("TeacherNotification", academic_id, Schooli_id,teacher_Id,strSelectedDt);
-            }
+//            else if(role_id.contentEquals("3")){
+//                call = service.getOnlineClassDetailsT("TeacherNotification", academic_id, Schooli_id,teacher_Id,strSelectedDt);
+//            }
 
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<OnlineClassDetailPojo>() {
                 @Override
