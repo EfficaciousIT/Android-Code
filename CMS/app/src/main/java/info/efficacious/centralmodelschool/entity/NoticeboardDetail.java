@@ -59,17 +59,21 @@ public class NoticeboardDetail {
     @Expose
     private String insertIP;
 
-    @SerializedName("intSchool_id")
-    @Expose
-    private Integer intSchoolId;
-
     @SerializedName("intstanderd_id")
     @Expose
     private Integer intstandarid;
 
     @SerializedName("intAcademic_id")
     @Expose
-    private Integer intAcademicId;
+    private String intAcademicId;
+
+    @SerializedName("intSchool_id")
+    @Expose
+    private Integer intSchoolId;
+
+
+
+
 
     public Integer getIntNoticeId() {
         return intNoticeId;
@@ -183,13 +187,7 @@ public class NoticeboardDetail {
         this.intSchoolId = intSchoolId;
     }
 
-    public Integer getIntAcademicId() {
-        return intAcademicId;
-    }
 
-    public void setIntAcademicId(Integer intAcademicId) {
-        this.intAcademicId = intAcademicId;
-    }
 
     public NoticeboardDetail(Integer intUserTypeId,
                              Integer intStandardId,
@@ -201,7 +199,9 @@ public class NoticeboardDetail {
                              String vchNotice,
                              Integer intInsertedBy,
                              String insertIP,
-                             Integer intSchoolId)
+                             Integer intSchoolId,
+                             String intAcademicId
+                             )
     {
         this.intUserTypeId = intUserTypeId;
         this.intStandardId = intStandardId;
@@ -214,6 +214,7 @@ public class NoticeboardDetail {
         this.intInsertedBy = intInsertedBy;
         this.insertIP = insertIP;
         this.intSchoolId = intSchoolId;
+        this.intAcademicId = intAcademicId;
         this.intstandarid = intStandardId;
     }
 
@@ -224,5 +225,13 @@ public class NoticeboardDetail {
 
     public void setIntstandarid(Integer intstandarid) {
         this.intstandarid = intstandarid;
+    }
+
+    public String getIntAcademicId() {
+        return intAcademicId;
+    }
+
+    public void setIntAcademicId(String intAcademicId) {
+        this.intAcademicId = intAcademicId;
     }
 }

@@ -30,6 +30,8 @@
     <color name="grey_200">#EEEEEE</color>
     <color name="transparentBlue">#c35564a6</color>
     <color name="lightcolor">#eaeaea</color>
+    <color name="light_gray">#F6F6F6</color>
+    <color name="dark_gray">#9A9A99</color>
     <color name="grey_500">#FFA4A4A4</color>
     <color name="multiple_image_select_primary">#5564a6</color>
     <color name="multiple_image_select_primaryDark">#5564a6</color>

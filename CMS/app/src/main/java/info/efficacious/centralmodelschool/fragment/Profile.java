@@ -59,7 +59,7 @@ public class Profile extends Fragment {
             fatherNametv, MotherNametv, addresstv, tv_number, txt_state,txt_annualtotalfees, outstanding_tv, annualToatal_tv,
             transport_total_fees_tv, transport_paidfess_tv, transport_osFees_tv,
             monthly_total_tv, monthly_paid_tv, monthly_os_tv, photo_os_tv, exam_os_tv, tution_os_tv, transport_os_tv,
-            total_osfees_tv;
+            total_osfees_tv,profile_college,txt_student_no,txt_std_teacher;
 
     String Schooli_id, role_id, academic_id, UserId,teachername;
     private ProgressDialog progress, progress1;
@@ -119,6 +119,10 @@ public class Profile extends Fragment {
         ProfileImage = myview.findViewById(R.id.profile_image_view);
         image_edit = myview.findViewById(R.id.imageViewedit);
         txt_state = myview.findViewById(R.id.profile_state);
+
+        txt_student_no = myview.findViewById(R.id.txt_student_no);
+        profile_college = myview.findViewById(R.id.profile_college);
+        txt_std_teacher = myview.findViewById(R.id.txt_std_teacher);
 
 
         image_edit.setOnClickListener(v -> {
@@ -244,12 +248,16 @@ public class Profile extends Fragment {
 
                     fatherNametv.setVisibility(View.VISIBLE);
                     MotherNametv.setVisibility(View.VISIBLE);
+                    txt_student_no.setVisibility(View.VISIBLE);
+                    txt_std_teacher.setText("Roll No:");
+                    txt_student_no.setText("Student ID: "+taskListDataList.get(0).getIntStudentID_Number().toString());
+                    profile_college.setText(taskListDataList.get(0).getIntRollNO().toString());
 
 
                 } else {
                     MotherNametv.setVisibility(View.GONE);
                     fatherNametv.setVisibility(View.GONE);
-
+                    txt_std_teacher.setText("School/College:");
                     StdName.setVisibility(View.GONE);
 
                 }

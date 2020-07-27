@@ -310,30 +310,6 @@ public class StandardDetail {
 
     @Override
     public String toString() {
-        return "StandardDetail{" +
-                "Teacher_Name='" + Teacher_Name + '\'' +
-                ", messagestatus='" + messagestatus + '\'' +
-                ", intAcademic_Id=" + intAcademic_Id +
-                ", intTeacher_Id=" + intTeacher_Id +
-                ", VchType='" + VchType + '\'' +
-                ", intStandardId=" + intStandardId +
-                ", vchStandardName='" + vchStandardName + '\'' +
-                ", intschoolId=" + intschoolId +
-                ", intDivisionId=" + intDivisionId +
-                ", vchDivisionName='" + vchDivisionName + '\'' +
-                ", intSubjectId=" + intSubjectId +
-                ", vchSubjectName='" + vchSubjectName + '\'' +
-                ", vchFileName='" + vchFileName + '\'' +
-                ", vchFilePath='" + vchFilePath + '\'' +
-                ", vchFilePath2='" + vchFilePath2 + '\'' +
-                ", vchFilePath3='" + vchFilePath3 + '\'' +
-                ", intApproval=" + intApproval +
-                ", vchComment='" + vchComment + '\'' +
-                ", dtDatetime='" + dtDatetime + '\'' +
-                ", dtInsertedDatetime='" + dtInsertedDatetime + '\'' +
-                ", vchProfile='" + vchProfile + '\'' +
-                ", intMyId=" + intMyId +
-                ", name='" + name + '\'' +
-                '}';
+        return  vchStandardName;
     }
 }

@@ -85,6 +85,9 @@ public class ProfileDetail {
     @SerializedName("intRollNo")
     @Expose
     private Integer intRollNO;
+    @SerializedName("intStudentID_Number")
+    @Expose
+    private Integer intStudentID_Number;
     @SerializedName("vchStandard_name")
     @Expose
     private String vchStandardname;
@@ -232,5 +235,13 @@ public class ProfileDetail {
         this.intschoolId = intschoolId;
         this.intAcademicId = intAcademicId;
         this.intUserid = intUserid;
+    }
+
+    public Integer getIntStudentID_Number() {
+        return intStudentID_Number;
+    }
+
+    public void setIntStudentID_Number(Integer intStudentID_Number) {
+        this.intStudentID_Number = intStudentID_Number;
     }
 }

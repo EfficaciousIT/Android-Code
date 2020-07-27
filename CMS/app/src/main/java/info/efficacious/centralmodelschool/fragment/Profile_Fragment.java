@@ -47,7 +47,7 @@ public class Profile_Fragment extends Fragment {
     private static final String PREFRENCES_NAME = "myprefrences";
     SharedPreferences settings;
     CircleImageView ProfileImage,image_edit;
-    TextView name,StdName,IdNo,MobileNotv,fathertv,Motherstv,fatherNametv,MotherNametv,addresstv;
+    TextView name,StdName,IdNo,MobileNotv,fathertv,Motherstv,fatherNametv,MotherNametv,addresstv,profile_college,txt_student_no;
     String Schooli_id,role_id,academic_id,UserId;
     private ProgressDialog progress;
     @Nullable
@@ -71,6 +71,8 @@ public class Profile_Fragment extends Fragment {
         addresstv=(TextView)myview.findViewById(R.id.addresstv);
         ProfileImage=(CircleImageView)myview.findViewById(R.id.imageView1);
         image_edit=(CircleImageView)myview.findViewById(R.id.imageViewedit);
+        txt_student_no = myview.findViewById(R.id.txt_student_no);
+        profile_college = myview.findViewById(R.id.profile_college);
         image_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,6 +158,9 @@ public class Profile_Fragment extends Fragment {
                     Motherstv.setVisibility(View.VISIBLE);
                     fatherNametv.setVisibility(View.VISIBLE);
                     MotherNametv.setVisibility(View.VISIBLE);
+                    txt_student_no.setVisibility(View.VISIBLE);
+                    txt_student_no.setText(taskListDataList.get(0).getIntStudentID_Number().toString());
+                    profile_college.setText(taskListDataList.get(0).getIntRollNO().toString());
                 }else
                 {
                     MotherNametv.setVisibility(View.GONE);

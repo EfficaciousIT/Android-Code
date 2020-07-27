@@ -10,12 +10,12 @@
             android:layout_weight="1"
             android:padding="6dip">
 
-         <!--   <SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_view_student"
                 android:background="@drawable/edittext_style"
                 android:layout_width="match_parent"
                 android:focusable="true"
-                android:layout_height="50dp"/>-->
+                android:layout_height="50dp"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/allstudent_list"
                 android:layout_width="match_parent"

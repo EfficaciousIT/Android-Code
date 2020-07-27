@@ -38,17 +38,17 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class StandardWise_Book extends Fragment  {
+public class StandardWise_Book extends Fragment {
     View myview;
     private static final String PREFRENCES_NAME = "myprefrences";
     SharedPreferences settings;
-//    SearchView searchView;
+    androidx.appcompat.widget.SearchView searchView;
     String Schooli_id;
     ConnectionDetector cd;
     RecyclerView recyclerView;
     private ProgressDialog progress;
     Book_Adapter madapter;
-String academic_id,role_id,userid,standard_id;
+    String academic_id,role_id,userid,standard_id;
     FloatingActionButton addButton;
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -57,7 +57,7 @@ String academic_id,role_id,userid,standard_id;
         myview = inflater.inflate(R.layout.activity_allstudent, null);
         cd = new ConnectionDetector(getActivity());
         ((MainActivity) getActivity()).setActionBarTitle("Library");
-//        searchView = (SearchView)myview.findViewById(R.id.search_view_student);
+        searchView = (androidx.appcompat.widget.SearchView) myview.findViewById(R.id.search_view_student);
         recyclerView  = (RecyclerView) myview.findViewById(R.id.allstudent_list);
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
         academic_id = settings.getString("TAG_ACADEMIC_ID", "");
@@ -72,32 +72,35 @@ String academic_id,role_id,userid,standard_id;
         progress.setMessage("loading...");
         myview.setFocusableInTouchMode(true);
         myview.requestFocus();
-        myview.setOnKeyListener((v, keyCode, event) -> {
-            if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    try {
-                        if (role_id.contentEquals("3")) {
-                            try {
-                                Student_Std_Fragment student_std_activity = new Student_Std_Fragment();
-                                Bundle args = new Bundle();
-                                args.putString("pagename", "LibraryTeacher");
-                                student_std_activity.setArguments(args);
-                                MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, student_std_activity).commitAllowingStateLoss();
-                            } catch (Exception ex) {
+        myview.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        try {
+                            if (role_id.contentEquals("3")) {
+                                try {
+                                    Student_Std_Fragment student_std_activity = new Student_Std_Fragment();
+                                    Bundle args = new Bundle();
+                                    args.putString("pagename", "LibraryTeacher");
+                                    student_std_activity.setArguments(args);
+                                    MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, student_std_activity).commitAllowingStateLoss();
+                                } catch (Exception ex) {
+
+                                }
+
 
                             }
-
+                        } catch (Exception ex) {
 
                         }
-                    } catch (Exception ex) {
 
+
+                        return true;
                     }
-
-
-                    return true;
                 }
+                return false;
             }
-            return false;
         });
         try {
             if (role_id.contentEquals("1") || role_id.contentEquals("2")) {
@@ -130,18 +133,18 @@ String academic_id,role_id,userid,standard_id;
 
 
         }
-       /* searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                madapter.getFilter().filter(newText);
-                return true;
-            }
-        });*/
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                madapter.getFilter().filter(newText);
+//                return true;
+//            }
+//        });
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,12 +155,13 @@ String academic_id,role_id,userid,standard_id;
         return myview;
     }
 
-   /* private void setupSearchView() {
+    private void setupSearchView() {
         searchView.setIconifiedByDefault(false);
+
         searchView.setSubmitButtonEnabled(true);
         searchView.setQueryHint("Search Book Name Here");
     }
-*/
+
     public void  StudentAsync (){
         try {
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
@@ -174,14 +178,14 @@ String academic_id,role_id,userid,standard_id;
                         generateBookList((ArrayList<LibraryDetail>) body.getLibraryDetail());
                     } catch (Exception ex) {
                         progress.dismiss();
-                        Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     progress.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -197,30 +201,31 @@ String academic_id,role_id,userid,standard_id;
     }
 
     public void generateBookList(ArrayList<LibraryDetail> taskListDataList) {
-        try {
-            if ((taskListDataList != null && !taskListDataList.isEmpty())) {
-                madapter = new Book_Adapter(taskListDataList,getActivity());
-
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-                recyclerView.setLayoutManager(layoutManager);
-
-                recyclerView.setAdapter(madapter);
+//        try {
+//            if ((taskListDataList != null && !taskListDataList.isEmpty())) {
+//                madapter = new Book_Adapter(taskListDataList,getActivity());
+//
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//
+//                recyclerView.setLayoutManager(layoutManager);
+//
+//                recyclerView.setAdapter(madapter);
 //                setupSearchView();
-            } else {
-                Toast toast = Toast.makeText(getActivity(),
-                        "No Data Available",
-                        Toast.LENGTH_SHORT);
-                View toastView = toast.getView();
-                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                toastView.setBackgroundResource(R.drawable.no_data_available);
-                toast.show();
-            }
-
-        } catch (Exception ex) {
-            progress.dismiss();
-            Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
-        }
+//            } else {
+//                Toast toast = Toast.makeText(getActivity(),
+//                        "No Data Available",
+//                        Toast.LENGTH_SHORT);
+//                View toastView = toast.getView();
+//                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+//                toastView.setBackgroundResource(R.drawable.no_data_available);
+//                toast.show();
+//            }
+//
+//        } catch (Exception ex) {
+//            progress.dismiss();
+//            Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+//        }
     }
 
 }
+

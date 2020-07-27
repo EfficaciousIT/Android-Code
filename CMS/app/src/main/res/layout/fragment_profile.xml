@@ -91,16 +91,7 @@
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
-                        <!--<TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="@color/grey1"
-                            android:id="@+id/profile_phone"
-                            android:text="Mobile Number"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="8dp"/>-->
+
                         <TextView
                             android:id="@+id/mobile_number_tv"
                             android:layout_width="wrap_content"
@@ -111,6 +102,18 @@
                             android:text="N/A"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:visibility="gone"
+                            android:id="@+id/txt_student_no"
+                            android:text="Mobile Number"
+                            android:paddingLeft="16dp"
+                            android:textColor="@color/black"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -200,10 +203,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="16dp"
+                            android:id="@+id/txt_std_teacher"
                             android:paddingTop="8dp"
                             android:paddingRight="16dp"
                             android:paddingBottom="8dp"
-                            android:text="School/College:"
+                            android:text="Roll No:"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
 
@@ -420,7 +424,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                            android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:background="@color/black" />
 

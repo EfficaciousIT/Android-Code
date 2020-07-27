@@ -34,11 +34,11 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class All_Standard_Book extends Fragment{
+public class All_Standard_Book extends Fragment {
     View myview;
     private static final String PREFRENCES_NAME = "myprefrences";
     SharedPreferences settings;
-    SearchView searchView;
+    androidx.appcompat.widget.SearchView searchView;
     String Schooli_id;
     ConnectionDetector cd;
     RecyclerView recyclerView;
@@ -49,7 +49,7 @@ public class All_Standard_Book extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myview=inflater.inflate(R.layout.activity_allstudent,null);
         cd = new ConnectionDetector(getActivity());
-//        searchView = (SearchView)myview.findViewById(R.id.search_view_student);
+        searchView = (androidx.appcompat.widget.SearchView) myview.findViewById(R.id.search_view_student);
         settings = getActivity().getSharedPreferences(PREFRENCES_NAME, Context.MODE_PRIVATE);
         Schooli_id= settings.getString("TAG_SCHOOL_ID", "");
         recyclerView  = (RecyclerView) myview.findViewById(R.id.allstudent_list);
@@ -72,26 +72,26 @@ public class All_Standard_Book extends Fragment{
 
             StudentAsync ();
         }
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                madapter.getFilter().filter(newText);
-                return true;
-            }
-        });*/
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                madapter.getFilter().filter(newText);
+//                return true;
+//            }
+//        });
         return myview;
     }
-  /*  private void setupSearchView()
+    private void setupSearchView()
     {
         searchView.setIconifiedByDefault(false);
         searchView.setSubmitButtonEnabled(true);
         searchView.setQueryHint("Search Book Name Here");
-    }*/
+    }
     public void  StudentAsync (){
         try {
             DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
@@ -105,17 +105,17 @@ public class All_Standard_Book extends Fragment{
                 @Override
                 public void onNext(LibraryDetailPojo body) {
                     try {
-                    generateBookList((ArrayList<LibraryDetail>) body.getLibraryDetail());
-                } catch (Exception ex) {
-                    progress.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
-                }
+                        generateBookList((ArrayList<LibraryDetail>) body.getLibraryDetail());
+                    } catch (Exception ex) {
+                        progress.dismiss();
+                        Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     progress.dismiss();
-                    Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -130,29 +130,29 @@ public class All_Standard_Book extends Fragment{
     }
 
     public void generateBookList(ArrayList<LibraryDetail> taskListDataList) {
-        try {
-            if ((taskListDataList != null && !taskListDataList.isEmpty())) {
-                madapter = new Book_Adapter(taskListDataList,getActivity());
-
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-                recyclerView.setLayoutManager(layoutManager);
-
-                recyclerView.setAdapter(madapter);
+//        try {
+//            if ((taskListDataList != null && !taskListDataList.isEmpty())) {
+//                madapter = new Book_Adapter(taskListDataList,getActivity());
+//
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//
+//                recyclerView.setLayoutManager(layoutManager);
+//
+//                recyclerView.setAdapter(madapter);
 //                setupSearchView();
-            } else {
-                Toast toast = Toast.makeText(getActivity(),
-                        "No Data Available",
-                        Toast.LENGTH_SHORT);
-                View toastView = toast.getView();
-                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                toastView.setBackgroundResource(R.drawable.no_data_available);
-                toast.show();
-            }
-
-        } catch (Exception ex) {
-            progress.dismiss();
-            Toast.makeText(getActivity(), "Response Taking Time,Seems Network issue!", Toast.LENGTH_SHORT).show();
-        }
+//            } else {
+//                Toast toast = Toast.makeText(getActivity(),
+//                        "No Data Available",
+//                        Toast.LENGTH_SHORT);
+//                View toastView = toast.getView();
+//                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+//                toastView.setBackgroundResource(R.drawable.no_data_available);
+//                toast.show();
+//            }
+//
+//        } catch (Exception ex) {
+//            progress.dismiss();
+//            Toast.makeText(getActivity(), "Response taking time seems Network issue!", Toast.LENGTH_SHORT).show();
+//        }
     }
 }

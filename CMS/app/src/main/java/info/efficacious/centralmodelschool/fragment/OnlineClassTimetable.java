@@ -140,6 +140,11 @@ public class OnlineClassTimetable extends Fragment {
             else if(role_id.contentEquals("5") || role_id.contentEquals("3")){
                 call = service.getOnlineClassTimetableS("StandardWiseList", academic_id, Schooli_id,stand_id,strSelectedDt);
             }
+            //Principal
+            else if(role_id.contentEquals("6")){
+
+                call = service.getOnlineClassTimetableS("StandardWiseList", academic_id, String.valueOf(0),stand_id,strSelectedDt);
+            }
 
             call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<OnlineClassTimetablePojo>() {
                 @Override

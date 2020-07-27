@@ -36,6 +36,7 @@ import info.efficacious.centralmodelschool.Tab.AdminApproval_Tab;
 import info.efficacious.centralmodelschool.Tab.Attendence_sliding_tab;
 import info.efficacious.centralmodelschool.Tab.DailyDiary_Tab;
 import info.efficacious.centralmodelschool.Tab.Event_Tab;
+import info.efficacious.centralmodelschool.Tab.LibTab_layout;
 import info.efficacious.centralmodelschool.Tab.StudentAttendanceActivity;
 import info.efficacious.centralmodelschool.Tab.TimetableActivity_student;
 import info.efficacious.centralmodelschool.Tab.TimetableActivity_teacher;
@@ -539,7 +540,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else if (id == R.id.nav_library) {
                         try {
                             title = "Library";
-                            startActivity(new Intent(MainActivity.this,LibraryActivity.class));
+                            //startActivity(new Intent(MainActivity.this,LibraryActivity.class));
+                            mfragment.beginTransaction().replace(R.id.content_main, new LibTab_layout()).commitAllowingStateLoss();
 //                            mfragment.beginTransaction().replace(R.id.content_main, new All_Standard_Book()).commitAllowingStateLoss();
 
                         } catch (Exception ex) {
@@ -851,12 +853,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else if (id == R.id.nav_library) {
                         try {
                             title = "Library";
+                            mfragment.beginTransaction().replace(R.id.content_main, new LibTab_layout()).commitAllowingStateLoss();
 //                            Student_Std_Fragment student_std_activity = new Student_Std_Fragment();
 //                            Bundle args = new Bundle();
 //                            args.putString("pagename", "LibraryTeacher");
 //                            student_std_activity.setArguments(args);
 //                            MainActivity.fragmentManager.beginTransaction().replace(R.id.content_main, student_std_activity).commitAllowingStateLoss();
-                            startActivity(new Intent(MainActivity.this,LibraryActivity.class));
+                            //startActivity(new Intent(MainActivity.this,LibraryActivity.class));
                         } catch (Exception ex) {
 
                         }
@@ -1092,7 +1095,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else if (id == R.id.nav_library) {
                         try {
                             title = "Library";
-                            startActivity(new Intent(MainActivity.this,LibraryActivity.class));
+                            mfragment.beginTransaction().replace(R.id.content_main, new LibTab_layout()).commitAllowingStateLoss();
+                            //startActivity(new Intent(MainActivity.this,LibraryActivity.class));
 //                            mfragment.beginTransaction().replace(R.id.content_main, new StandardWise_Book()).commitAllowingStateLoss();
 
                         } catch (Exception ex) {

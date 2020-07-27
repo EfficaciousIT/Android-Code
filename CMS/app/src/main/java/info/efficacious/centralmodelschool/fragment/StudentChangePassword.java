@@ -2,6 +2,7 @@ package info.efficacious.centralmodelschool.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -28,6 +29,8 @@ import java.util.regex.Pattern;
 
 import info.efficacious.centralmodelschool.Interface.DataService;
 import info.efficacious.centralmodelschool.R;
+import info.efficacious.centralmodelschool.activity.Login_activity;
+import info.efficacious.centralmodelschool.activity.MainActivity;
 import info.efficacious.centralmodelschool.common.ConnectionDetector;
 import info.efficacious.centralmodelschool.entity.LoginDetail;
 import info.efficacious.centralmodelschool.webApi.RetrofitInstance;
@@ -208,6 +211,15 @@ public class StudentChangePassword extends Fragment implements View.OnClickListe
                 public void onComplete() {
                     progressBar.dismiss();
                     Toast.makeText(getActivity(), "Password Change Successfully", Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor editor_delete = settings.edit();
+                    editor_delete.clear().commit();
+//                this.deleteDatabase("Notifications");
+                    Intent intent = new Intent(getContext(), Login_activity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             });
         } catch (Exception ex) {

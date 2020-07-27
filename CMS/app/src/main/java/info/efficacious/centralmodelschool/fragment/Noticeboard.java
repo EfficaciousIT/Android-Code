@@ -136,7 +136,7 @@ public class Noticeboard extends Fragment {
             else if(role_id.contentEquals("1"))
             {
                 Log.d("RESULT234",""+intStandard_id+"Sss"+Schooli_id);
-                call = service.getDashboardDetail("NoticeBoardStudent", intStandard_id, Schooli_id);
+                call = service.getDashboardDetailStudent("NoticeBoardStudent",academic_id, intStandard_id, Schooli_id);
             }
             else
             {

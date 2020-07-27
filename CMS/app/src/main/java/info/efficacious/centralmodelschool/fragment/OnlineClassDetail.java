@@ -141,6 +141,10 @@ public class OnlineClassDetail extends Fragment {
             else if(role_id.contentEquals("5") || role_id.contentEquals("3")){
                 call = service.getOnlineClassDetails("StudentNotification", academic_id, Schooli_id,stand_id,strSelectedDt);
             }
+            //Principal
+            else if(role_id.contentEquals("6")){
+                call = service.getOnlineClassDetails("StudentNotification", academic_id, String.valueOf(0),stand_id,strSelectedDt);
+            }
             //Teachers
 //            else if(role_id.contentEquals("3")){
 //                call = service.getOnlineClassDetailsT("TeacherNotification", academic_id, Schooli_id,teacher_Id,strSelectedDt);

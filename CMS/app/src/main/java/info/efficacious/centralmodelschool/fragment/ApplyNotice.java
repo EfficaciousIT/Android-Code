@@ -79,7 +79,7 @@ public class ApplyNotice extends AppCompatActivity {
     int insertflag;
     private static final String PREFRENCES_NAME = "myprefrences";
     SharedPreferences settings;
-    String Issue_Date, End_Date, Notice_Subject, Notice_Detail, role_id, userid, Schooli_id, standard_id;
+    String Issue_Date, End_Date, Notice_Subject, Notice_Detail, role_id, userid, Schooli_id, standard_id,academic_id;
     RelativeLayout std_relativee;
     HashMap<Object, Object> map;
     private ArrayList<HashMap<Object, Object>> dataList;
@@ -116,6 +116,7 @@ public class ApplyNotice extends AppCompatActivity {
         Year_id = settings.getString("TAG_ACADEMIC_ID", "");
         standard_id = settings.getString("TAG_STANDERDID", "");
         Schooli_id = settings.getString("TAG_SCHOOL_ID", "");
+        academic_id = settings.getString("TAG_ACADEMIC_ID", "");
         try {
             if (role_id.contentEquals("6") || role_id.contentEquals("7")) {
                 Schooli_id = "";
@@ -781,7 +782,7 @@ public class ApplyNotice extends AppCompatActivity {
                 if (UserAll.contentEquals("2")) {
                 } else {
                     DataService service = RetrofitInstance.getRetrofitInstance().create(DataService.class);
-                    NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", 2);
+                    NoticeboardDetail noticeboardDetail = new NoticeboardDetail(Integer.parseInt(UserAll), Integer.parseInt(Standard_selected), 0, 0, fromdate, enddate, Notice_Subject, Notice_Detail, Integer.parseInt(userid), "", 2,academic_id);
                     Log.d("TAG" , "IAM1");
                     Observable<ResponseBody> call = service.InsertNotice("insert", noticeboardDetail);
                     call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {

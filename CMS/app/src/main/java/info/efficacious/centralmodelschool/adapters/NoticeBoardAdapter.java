@@ -6,6 +6,7 @@ import android.graphics.Color;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ public class NoticeBoardAdapter extends RecyclerView.Adapter<NoticeBoardAdapter.
             holder.Issuedate.setText(data.get(position).getIssueDate().toString());
             holder.Lastdate.setText(data.get(position).getEndDate().toString());
             holder.Notice.setText("Notice:"+data.get(position).getNotice().toString());
+            Linkify.addLinks(holder.Notice, Linkify.WEB_URLS);
             holder.Subject.setText("Subject:"+data.get(position).getSubject().toString());
         }catch (Exception ex)
         {

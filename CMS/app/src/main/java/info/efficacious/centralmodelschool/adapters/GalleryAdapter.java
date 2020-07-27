@@ -52,6 +52,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private static final String PREFRENCES_NAME = "myprefrences";
     public GalleryAdapter(ArrayList<SchoolDetail> dataList,Context context) {
         data = dataList;
+        Log.d("CMSSSSSSSS",""+data.size());
         mcontext=context;
     }
 
@@ -72,7 +73,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             school_id=settings.getString("TAG_SCHOOL_ID", "");
             String url= RetrofitInstance.Image_URL+data.get(position).getName();
             Log.d("TAG","onBindViewHolderURL"+url);
-            holder.rl_image.setVisibility(View.VISIBLE);
+
 
             Glide.with(mcontext)
                     .load(url)
@@ -84,6 +85,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
                             //Log.d(TAG,e.getLocalizedMessage(),e);
                             holder.rl_image.setVisibility(View.GONE);
+                            holder.eventDescriptiontv.setVisibility(View.GONE);
                             return false;
                         }
 
